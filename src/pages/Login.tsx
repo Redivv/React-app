@@ -1,28 +1,28 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
+import AuthContext from "../store/auth-context";
+import FirebaseLoginResponse from "../types/firebaseLoginResponse";
 
 const Login: React.FC = () => {
   const loginMailInput = useRef<HTMLInputElement>(null);
   const loginPasswordInput = useRef<HTMLInputElement>(null);
+  const authContext = useContext(AuthContext);
 
-  const formSubmitHandler = (event: React.FormEvent) => {
+  const formSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    axios
-      .post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCURNYl2XhPS4SIeOoJRACUgUkIUkjpPwE",
+    try {
+      const response = await axios.post<FirebaseLoginResponse>(
+        process.env.REACT_APP_FIREBASE_LOGIN_ROUTE!,
         {
           email: loginMailInput.current?.value,
           password: loginPasswordInput.current?.value,
           returnSecureToken: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
-      )
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error.response.data.error));
+      );
+      authContext.login(response.data.idToken);
+    } catch (error: any) {
+      console.log(error.response);
+    }
   };
 
   return (
