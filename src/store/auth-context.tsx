@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { createContext, useState } from "react";
 import AuthData from "../types/authData";
 
@@ -16,16 +17,21 @@ export const AuthContextProvider: React.FC = (props) => {
   const tokenData = retriveStoredToken();
   const [token, setToken] = useState(tokenData);
 
-  console.log(token);
-
   const loginHandler = (token: string) => {
     setToken(token);
     localStorage.setItem("token", token);
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        //refreshToken
+      }
+    );
   };
 
   const logoutHandler = () => {
     setToken(null);
     localStorage.removeItem("token");
+    axios.interceptors.response.eject(0);
   };
 
   const contextValues = {
