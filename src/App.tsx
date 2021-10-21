@@ -11,7 +11,7 @@ import AuthContext from "./store/auth-context";
 
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
-  const availableRoutes = authContext.token ? (
+  const availableRoutes = authContext.tokenObject?.idToken ? (
     <Fragment>
       <Redirect to="/main" />
       <Route path="/main" strict>

@@ -1,27 +1,26 @@
-import axios from "axios";
 import React, { useRef, useContext } from "react";
+import TokenRequestService from "../services/TokenRequestService";
 import AuthContext from "../store/auth-context";
-import FirebaseLoginResponse from "../types/firebaseLoginResponse";
 
 const Login: React.FC = () => {
   const loginMailInput = useRef<HTMLInputElement>(null);
   const loginPasswordInput = useRef<HTMLInputElement>(null);
   const authContext = useContext(AuthContext);
 
-  const formSubmitHandler = async (event: React.FormEvent) => {
+  const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      const response = await axios.post<FirebaseLoginResponse>(
-        process.env.REACT_APP_FIREBASE_LOGIN_ROUTE!,
-        {
-          email: loginMailInput.current?.value,
-          password: loginPasswordInput.current?.value,
-          returnSecureToken: true,
-        }
-      );
-      authContext.login(response.data.idToken);
-    } catch (error: any) {
-      console.log(error.response);
+    if (loginMailInput.current?.value && loginPasswordInput.current?.value) {
+      TokenRequestService
+        .userLoginRequest(
+          loginMailInput.current.value,
+          loginPasswordInput.current.value
+        )
+        .then((response) => {
+          authContext.login({
+            idToken: response.data.idToken,
+            refreshToken: response.data.refreshToken,
+          });
+        });
     }
   };
 
