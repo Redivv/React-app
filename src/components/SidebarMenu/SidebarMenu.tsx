@@ -10,7 +10,7 @@ import classes from "./SidebarMenu.module.css";
 
 const SidebarMenu: React.FC<{ className: string }> = (props) => {
   return (
-    <div
+    <aside
       className={`${props.className} ${classes.sidebarMenu} position-relative`}
     >
       <NotificationsLink />
@@ -20,7 +20,7 @@ const SidebarMenu: React.FC<{ className: string }> = (props) => {
       <FilesLink />
       <TrashLink />
       <LogoutLink />
-    </div>
+    </aside>
   );
 };
 

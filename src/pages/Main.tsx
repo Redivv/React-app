@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import SidebarMenu from "../components/SidebarMenu/SidebarMenu";
+import MainTable from "../components/MainTable/MainTable";
 import CategoriesRequestService from "../services/CategoriesRequestService";
 import AuthContext from "../store/auth-context";
 
@@ -12,10 +13,10 @@ const Main: React.FC = () => {
   }, [authContext.tokenObject]);
 
   return (
-    <div className="container-fluid vh-100">
+    <div className="container-fluid vh-100 p-0">
       <div className="row h-inherit">
-        <SidebarMenu className="col-3"></SidebarMenu>
-        <div className="col-9">Duppa</div>
+        <SidebarMenu className="col-3" />
+        <MainTable className="col-9" />
       </div>
     </div>
   );

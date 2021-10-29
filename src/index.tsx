@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import "@fortawesome/fontawesome-free/css/all.css"
-import "./global.css"
+import "@fortawesome/fontawesome-free/css/all.css";
+import "./global.css";
+import "./boostrapOverrides.css";
 
 import React from "react";
 import ReactDOM from "react-dom";

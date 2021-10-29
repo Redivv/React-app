@@ -1,5 +1,6 @@
-body{
+body {
     font-size: 20px;
+    overflow: hidden;
 }
 
 .h-inherit {

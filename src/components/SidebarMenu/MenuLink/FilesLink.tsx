@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import MenuLink from "./MenuLink";
-import ArchiveModal from "./MenuModals/ArchiveModal";
 import FilesModal from "./MenuModals/FilesModal";
 
 const FilesLink = () => {

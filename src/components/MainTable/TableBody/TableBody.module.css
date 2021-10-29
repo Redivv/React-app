@@ -1,0 +1,15 @@
+.tableColumns {
+    height: 92vh;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.tableColumn {
+    text-align: center;
+    padding: 0;
+    border-left: 2px solid #1f1f1f;
+}
+
+.tableColumn:first-of-type {
+    border-left: 0;
+}
