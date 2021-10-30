@@ -1,0 +1,14 @@
+.newOfferButton {
+    width: 75%;
+    left: 12.5%;
+    text-align: center;
+    background-color: #131313;
+    margin: 2% auto 0 auto;
+    border-radius: 10px;
+    border: 4px solid rgb(0, 172, 230);
+    color: rgb(199, 199, 199);
+}
+
+.newOfferButton>button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2300ace6'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z'/%3e%3c/svg%3e") !important
+}
