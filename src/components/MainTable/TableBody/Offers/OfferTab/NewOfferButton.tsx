@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import classes from "./NewOfferButton.module.css";
-import OfferModal from "./OfferModal";
+import OfferModal from "./OfferModal/OfferModal";
 
 const NewOfferButton = () => {
   const [show, setShow] = useState(false);

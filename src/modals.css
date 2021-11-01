@@ -1,0 +1,63 @@
+.modal-dialog {
+    max-width: 1000px;
+}
+
+.modal-header {
+    padding: 0.5% 1%;
+    font-size: 0.7rem;
+    background-color: rgb(0, 172, 230);
+    color: white;
+    border-bottom: none;
+}
+
+.modal-header>button {
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFF'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+    opacity: 1;
+}
+
+.modal-title {
+    font-size: 1rem;
+}
+
+.modal-body{
+    min-height: 30vh;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 1rem;
+}
+
+.modal-body .form-control{
+    font-size: 0.8rem;
+    padding: 0.3rem 0.5rem;
+}
+
+.modal-body .accordion-button{
+    background-color: rgb(0, 172, 230);
+    color: #212529;
+    border: 1px solid #1f1f1f;
+    border-radius: 0 !important;
+}
+
+.modal-body .accordion-body{
+    padding: 1% 2%;
+}
+
+.modal-body, .modal-footer, .modal-content {
+    border-color: #1f1f1f;
+    background-color: #3d3d3d;
+    color: rgb(199, 199, 199);
+}
+
+.modal-footer>.btn-primary{
+    background-color: rgb(0, 172, 230);
+    border: none;
+}
+.modal-footer>.btn-primary:hover{
+    background-color: rgb(0, 145, 194);
+    border: none;
+}
+
+.modal-footer>.btn-secondary{
+    border: none;
+}

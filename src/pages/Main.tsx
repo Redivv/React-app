@@ -3,6 +3,7 @@ import SidebarMenu from "../components/SidebarMenu/SidebarMenu";
 import MainTable from "../components/MainTable/MainTable";
 import CategoriesRequestService from "../services/CategoriesRequestService";
 import AuthContext from "../store/auth-context";
+import "../modals.css";
 
 const Main: React.FC = () => {
   const authContext = useContext(AuthContext);
