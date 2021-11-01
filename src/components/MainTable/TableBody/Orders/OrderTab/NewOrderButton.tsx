@@ -1,22 +1,22 @@
 import { Fragment, useState } from "react";
-import classes from "./NewOfferButton.module.css";
-import OfferModal from "./OfferModal/OfferModal";
+import classes from "./NewOrderButton.module.css";
+import OrderModal from "./OrderModal/OrderModal";
 
-const NewOfferButton = () => {
+const NewOrderButton = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
     <Fragment>
-      <h2 className={classes.newOfferButton}>
+      <h2 className={classes.newOrderButton}>
         <button className="accordion-button" onClick={handleShow}>
-          Add New Offer
+          Add New Order
         </button>
       </h2>
-      <OfferModal show={show} handleClose={handleClose} />
+      <OrderModal show={show} handleClose={handleClose} />
     </Fragment>
   );
 };
 
-export default NewOfferButton;
+export default NewOrderButton;

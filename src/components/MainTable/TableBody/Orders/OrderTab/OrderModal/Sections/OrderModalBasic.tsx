@@ -1,7 +1,7 @@
 import { Accordion, Form } from "react-bootstrap";
 import React, { RefObject } from "react";
 
-const OfferModalBasic: React.FC<{
+const OrderModalBasic: React.FC<{
   refs: {
     client: RefObject<HTMLInputElement>;
   };
@@ -27,4 +27,4 @@ const OfferModalBasic: React.FC<{
   );
 };
 
-export default OfferModalBasic;
+export default OrderModalBasic;

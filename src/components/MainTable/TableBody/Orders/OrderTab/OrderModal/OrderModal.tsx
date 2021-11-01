@@ -1,10 +1,10 @@
 import { Modal, Button, Form, Accordion } from "react-bootstrap";
 import React, { FormEvent, useRef } from "react";
-import OfferModalBasic from "./Sections/OfferModalBasic";
-import OfferModalNotes from "./Sections/OfferModalNotes";
-import OfferModalShipping from "./Sections/OfferModalShipping";
+import OrderModalBasic from "./Sections/OrderModalBasic";
+import OrderModalNotes from "./Sections/OrderModalNotes";
+import OrderModalShipping from "./Sections/OrderModalShipping";
 
-const OfferModal: React.FC<{ show: boolean; handleClose: () => void }> = (
+const OrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   props
 ) => {
   const clientInput = useRef<HTMLInputElement>(null);
@@ -19,12 +19,12 @@ const OfferModal: React.FC<{ show: boolean; handleClose: () => void }> = (
       <Modal.Header closeButton>
         <Modal.Title>New Order</Modal.Title>
       </Modal.Header>
-      <Form id="offerForm" onSubmit={handleSubmit}>
+      <Form id="orderForm" onSubmit={handleSubmit}>
         <Modal.Body>
           <Accordion defaultActiveKey="basic">
-            <OfferModalBasic refs={{ client: clientInput }} />
-            <OfferModalShipping />
-            <OfferModalNotes />
+            <OrderModalBasic refs={{ client: clientInput }} />
+            <OrderModalShipping />
+            <OrderModalNotes />
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
@@ -40,4 +40,4 @@ const OfferModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   );
 };
 
-export default OfferModal;
+export default OrderModal;

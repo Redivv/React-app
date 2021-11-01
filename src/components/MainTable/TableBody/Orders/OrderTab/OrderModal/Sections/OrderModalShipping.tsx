@@ -1,6 +1,6 @@
 import { Accordion, Form } from "react-bootstrap";
 
-const OfferModalShipping = () => {
+const OrderModalShipping = () => {
   return (
     <Accordion.Item eventKey="shipping">
       <Accordion.Header>Shipping</Accordion.Header>
@@ -18,4 +18,4 @@ const OfferModalShipping = () => {
   );
 };
 
-export default OfferModalShipping;
+export default OrderModalShipping;

@@ -1,10 +1,10 @@
 import { Accordion } from "react-bootstrap";
-import classes from "./OfferTab.module.css";
+import classes from "./OrderTab.module.css";
 
-const OfferTab = () => {
+const OrderTab = () => {
   return (
     <Accordion.Item eventKey="0">
-      <Accordion.Header className={classes.offerTab}>Penis</Accordion.Header>
+      <Accordion.Header className={classes.orderTab}>Penis</Accordion.Header>
       <Accordion.Body>
         <div className="d-flex">
           <div className={`col-3 ${classes.tableColumn}`}>dupa</div>
@@ -17,4 +17,4 @@ const OfferTab = () => {
   );
 };
 
-export default OfferTab;
+export default OrderTab;
