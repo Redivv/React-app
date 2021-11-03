@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import classes from "./NewOrderButton.module.css";
-import OrderModal from "./OrderModal/OrderModal";
+import NewOrderModal from "./OrderModal/NewOrderModal";
 
 const NewOrderButton = () => {
   const [show, setShow] = useState(false);
@@ -14,7 +14,7 @@ const NewOrderButton = () => {
           Add New Order
         </button>
       </h2>
-      <OrderModal show={show} handleClose={handleClose} />
+      <NewOrderModal show={show} handleClose={handleClose} />
     </Fragment>
   );
 };

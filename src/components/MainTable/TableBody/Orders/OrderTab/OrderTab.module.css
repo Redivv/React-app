@@ -11,3 +11,23 @@
     padding: 0;
     text-align: center;
 }
+
+.orderTab>button{
+    cursor: row-resize !important;
+}
+
+.orderTab>button::after{
+    margin-left: 1%;
+}
+
+.deleteOrderButton{
+    padding: 2% 3%;
+    margin-left: auto;
+    cursor: pointer;
+    color: red;
+    font-size: 1.2rem;
+}
+
+.deleteOrderButton:hover>i{
+    color: rgb(197, 0, 0);
+}

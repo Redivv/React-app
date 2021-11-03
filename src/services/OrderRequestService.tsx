@@ -23,6 +23,14 @@ class OrderRequestService {
       }
     );
   }
+
+  deleteOrderById = (idToken: string, objectId: string) => {
+    return axios.delete(
+      process.env
+        .REACT_APP_FIREBASE_DB_API_ROUTE!.replace("<DB_ROUTE>", `/orders/${objectId}.json`)
+        .replace("<ID_TOKEN>", idToken)
+    );
+  }
 }
 
 export default new OrderRequestService();

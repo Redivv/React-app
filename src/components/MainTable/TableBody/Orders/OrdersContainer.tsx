@@ -3,33 +3,24 @@ import classes from "./OrdersContainer.module.css";
 import { Accordion } from "react-bootstrap";
 import NewOrderButton from "./OrderTab/NewOrderButton";
 import { useEffect, useContext, useState, Fragment } from "react";
-import OrderRequestService from "../../../../services/OrderRequestService";
-import AuthContext from "../../../../store/auth-context";
 import Order from "../../../../types/order";
+import OrderContext from "../../../../store/order-context";
 
 const OrdersContainer = () => {
-  const authContext = useContext(AuthContext);
+  const orderContext = useContext(OrderContext);
   const [displayedOrders, setDisplayedOrders] = useState<Order[] | []>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    OrderRequestService.getAllCurrentOrders(authContext.tokenObject?.idToken!)
-      .then((response) => {
-        let newDisplayedOrders = [];
-        for (const orderId in response.data!) {
-          newDisplayedOrders.push({ id: orderId, ...response.data[orderId] });
-        }
-        setDisplayedOrders(newDisplayedOrders);
-        setIsLoaded(true);
-      })
-      .catch((error) => console.log(error.response));
-  }, [authContext.tokenObject?.idToken]);
+    setDisplayedOrders(orderContext.displayedOrders);
+    setIsLoaded(orderContext.areOrdersLoaded);
+  }, [orderContext.displayedOrders, orderContext.areOrdersLoaded]);
   return (
     <Accordion className={classes.ordersContainer}>
       {isLoaded && (
         <Fragment>
-          {displayedOrders.map((order) => (
-            <OrderTab order={order} key={order.id} />
+          {displayedOrders.map((order, index) => (
+            <OrderTab order={order} ordinalNumber={index} key={order.id} />
           ))}
           <NewOrderButton />
         </Fragment>

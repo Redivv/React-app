@@ -3,11 +3,10 @@ import React, { FormEvent, useRef, useState, useContext } from "react";
 import OrderModalBasic from "./Sections/OrderModalBasic";
 import OrderModalNotes from "./Sections/OrderModalNotes";
 import OrderModalShipping from "./Sections/OrderModalShipping";
-import AuthContext from "../../../../../../store/auth-context";
-import OrderRequestService from "../../../../../../services/OrderRequestService";
+import OrderContext from "../../../../../../store/order-context";
 import OrderValidationService from "../../../../../../services/OrderValidationService";
 
-const OrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
+const NewOrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   props
 ) => {
   const titleInput = useRef<HTMLInputElement>(null);
@@ -17,9 +16,9 @@ const OrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   const notesInput = useRef<HTMLTextAreaElement>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const authContext = useContext(AuthContext);
+  const orderContext = useContext(OrderContext);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const orderObject = {
       title: titleInput.current?.value!,
@@ -35,21 +34,10 @@ const OrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
       return;
     }
     setIsProcessing(true);
-    OrderRequestService.addNewOrder(
-      authContext.tokenObject?.idToken!,
-      orderObject
-    )
-      .then((response) => {
-        console.log(response);
-        alert("Order Saved");
-        props.handleClose();
-        setIsProcessing(false);
-      })
-      .catch((error) => {
-        alert("KURWA");
-        console.log(error.response);
-        setIsProcessing(false);
-      });
+    const shouldModalBeClosed = await orderContext.addNewOrder(orderObject);
+    if (shouldModalBeClosed) {
+      handleCloseModal();
+    }
   };
 
   const handleCloseModal = () => {
@@ -91,4 +79,4 @@ const OrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   );
 };
 
-export default OrderModal;
+export default NewOrderModal;
