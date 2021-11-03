@@ -27,6 +27,15 @@
     font-size: 1rem;
 }
 
+.modal-body>.spinner-border{
+    width: 4rem;
+    height: 4rem;
+    border: .4em solid currentColor;
+    border-right-color: transparent;
+    margin: 8% auto;
+    display: block;
+}
+
 .modal-body .form-control{
     font-size: 0.8rem;
     padding: 0.3rem 0.5rem;

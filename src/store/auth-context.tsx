@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { createContext, useState } from "react";
 import TokenRequestService from "../services/TokenRequestService";
-import AuthData from "../types/authData";
+import AuthContextData from "../types/authContextData";
 import AuthTokensObject from "../types/authTokensObject";
 
-const AuthContext = createContext<AuthData>({
+const AuthContext = createContext<AuthContextData>({
   tokenObject: { idToken: null, refreshToken: null },
   isLoggedIn: false,
   login: () => {},

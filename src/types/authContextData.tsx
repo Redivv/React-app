@@ -1,10 +1,10 @@
 import AuthTokensObject from './authTokensObject';
 
-type AuthData = {
+type AuthContextData = {
   tokenObject: AuthTokensObject | null;
   isLoggedIn: boolean;
   login: (tokensObject: AuthTokensObject) => void;
   logout: () => void;
 };
 
-export default AuthData;
+export default AuthContextData;

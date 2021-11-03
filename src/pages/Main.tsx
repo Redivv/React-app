@@ -1,18 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import SidebarMenu from "../components/SidebarMenu/SidebarMenu";
 import MainTable from "../components/MainTable/MainTable";
-import CategoriesRequestService from "../services/CategoriesRequestService";
-import AuthContext from "../store/auth-context";
 import "../modals.css";
 
 const Main: React.FC = () => {
-  const authContext = useContext(AuthContext);
-  useEffect(() => {
-    CategoriesRequestService.getAllCategories(authContext.tokenObject?.idToken!)
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error.response));
-  }, [authContext.tokenObject]);
-
   return (
     <div className="container-fluid vh-100 p-0">
       <div className="row h-inherit">
