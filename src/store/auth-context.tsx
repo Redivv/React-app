@@ -25,7 +25,7 @@ export const AuthContextProvider: React.FC = (props) => {
   if (tokenObject.idToken) {
     axios.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         const originalConfig = error.config;
         if (error.response?.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
@@ -33,17 +33,17 @@ export const AuthContextProvider: React.FC = (props) => {
             logoutHandler();
             return Promise.reject(error);
           }
-          TokenRequestService
-            .tokenRefreshRequest(tokenObject.refreshToken)
-            .then((response) => {
-              loginHandler({
-                idToken: response.data.id_token,
-                refreshToken: response.data.refresh_token,
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          const response = await TokenRequestService.tokenRefreshRequest(
+            tokenObject.refreshToken
+          );
+          loginHandler({
+            idToken: response.data.id_token,
+            refreshToken: response.data.refresh_token,
+          });
+          let errorUrl = new URL(originalConfig.url);
+          errorUrl.searchParams.set("auth", response.data.id_token);
+          originalConfig["url"] = errorUrl.toString();
+          return await axios.request(originalConfig);
         }
         return Promise.reject(error);
       }

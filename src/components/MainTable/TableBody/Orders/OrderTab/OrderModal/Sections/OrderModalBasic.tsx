@@ -6,6 +6,10 @@ const OrderModalBasic: React.FC<{
     title: RefObject<HTMLInputElement>;
     client: RefObject<HTMLInputElement>;
   };
+  values: {
+    title: string | undefined;
+    client: string | undefined;
+  }
 }> = (props) => {
   return (
     <Accordion.Item eventKey="basic">
@@ -17,6 +21,7 @@ const OrderModalBasic: React.FC<{
             type="text"
             placeholder="Order Title"
             ref={props.refs.title}
+            defaultValue={props.values?.title}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="clientInput">
@@ -25,6 +30,7 @@ const OrderModalBasic: React.FC<{
             type="text"
             placeholder="Client Name"
             ref={props.refs.client}
+            defaultValue={props.values?.client}
           />
         </Form.Group>
       </Accordion.Body>

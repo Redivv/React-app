@@ -5,6 +5,9 @@ const OrderModalNotes: React.FC<{
   refs: {
     notes: RefObject<HTMLTextAreaElement>;
   };
+  values: {
+    notes: string | undefined;
+  }
 }> = (props) => {
   return (
     <Accordion.Item eventKey="notes">
@@ -17,6 +20,7 @@ const OrderModalNotes: React.FC<{
             placeholder="Notes"
             style={{ height: "100px" }}
             ref={props.refs.notes}
+            defaultValue={props.values?.notes}
           />
         </Form.Group>
       </Accordion.Body>

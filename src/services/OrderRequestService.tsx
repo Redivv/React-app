@@ -11,9 +11,26 @@ class OrderRequestService {
   }
 
   addNewOrder(idToken: string, orderObject: Order) {
-    return axios.post(
+    return axios.post<{ name: string }>(
       process.env
         .REACT_APP_FIREBASE_DB_API_ROUTE!.replace("<DB_ROUTE>", "/orders.json")
+        .replace("<ID_TOKEN>", idToken),
+      orderObject,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
+  editOrder(idToken: string, orderObject: Order) {
+    return axios.put(
+      process.env
+        .REACT_APP_FIREBASE_DB_API_ROUTE!.replace(
+          "<DB_ROUTE>",
+          `/orders/${orderObject.id}.json`
+        )
         .replace("<ID_TOKEN>", idToken),
       orderObject,
       {
@@ -27,10 +44,13 @@ class OrderRequestService {
   deleteOrderById = (idToken: string, objectId: string) => {
     return axios.delete(
       process.env
-        .REACT_APP_FIREBASE_DB_API_ROUTE!.replace("<DB_ROUTE>", `/orders/${objectId}.json`)
+        .REACT_APP_FIREBASE_DB_API_ROUTE!.replace(
+          "<DB_ROUTE>",
+          `/orders/${objectId}.json`
+        )
         .replace("<ID_TOKEN>", idToken)
     );
-  }
+  };
 }
 
 export default new OrderRequestService();

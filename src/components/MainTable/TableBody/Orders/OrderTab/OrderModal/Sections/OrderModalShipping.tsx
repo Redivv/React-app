@@ -6,6 +6,10 @@ const OrderModalShipping: React.FC<{
     address: RefObject<HTMLInputElement>;
     deadline: RefObject<HTMLInputElement>;
   };
+  values: {
+    address: string | undefined;
+    deadline: string | undefined;
+  }
 }> = (props) => {
   return (
     <Accordion.Item eventKey="shipping">
@@ -17,6 +21,7 @@ const OrderModalShipping: React.FC<{
             type="text"
             placeholder="Shipping Address"
             ref={props.refs.address}
+            defaultValue={props.values?.address}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="shippingDateInput">
@@ -25,6 +30,7 @@ const OrderModalShipping: React.FC<{
             type="date"
             placeholder="Shipping Deadline"
             ref={props.refs.deadline}
+            defaultValue={props.values?.deadline}
           />
         </Form.Group>
       </Accordion.Body>

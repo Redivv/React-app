@@ -1,6 +1,6 @@
 import OrderTab from "./OrderTab/OrderTab";
 import classes from "./OrdersContainer.module.css";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Spinner } from "react-bootstrap";
 import NewOrderButton from "./OrderTab/NewOrderButton";
 import { useEffect, useContext, useState, Fragment } from "react";
 import Order from "../../../../types/order";
@@ -17,14 +17,14 @@ const OrdersContainer = () => {
   }, [orderContext.displayedOrders, orderContext.areOrdersLoaded]);
   return (
     <Accordion className={classes.ordersContainer}>
-      {isLoaded && (
+      {isLoaded ? (
         <Fragment>
           {displayedOrders.map((order, index) => (
             <OrderTab order={order} ordinalNumber={index} key={order.id} />
           ))}
           <NewOrderButton />
         </Fragment>
-      )}
+      ) : <Spinner animation="border" variant="primary" className="mx-auto mt-5 d-block" />}
     </Accordion>
   );
 };

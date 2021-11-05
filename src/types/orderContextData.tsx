@@ -5,6 +5,7 @@ type OrderContextData = {
   areOrdersLoaded: boolean;
   isActionBeingProcessed: boolean;
   addNewOrder: (orderObject: Order) => Promise<boolean> | void;
+  editOrder: (orderObject: Order, ordinalNumber: number) => Promise<boolean> | void;
   deleteOrderById: (ordinalNumber: number, objectId: string) => void;
 };
 

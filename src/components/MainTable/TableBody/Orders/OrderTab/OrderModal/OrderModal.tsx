@@ -5,22 +5,25 @@ import OrderModalNotes from "./Sections/OrderModalNotes";
 import OrderModalShipping from "./Sections/OrderModalShipping";
 import OrderContext from "../../../../../../store/order-context";
 import OrderValidationService from "../../../../../../services/OrderValidationService";
+import Order from "../../../../../../types/order";
 
-const NewOrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
-  props
-) => {
+const OrderModal: React.FC<{
+  show: boolean;
+  handleClose: () => void;
+  order?: Order;
+  ordinalNumber?: number;
+}> = (props) => {
   const titleInput = useRef<HTMLInputElement>(null);
   const clientInput = useRef<HTMLInputElement>(null);
   const addressInput = useRef<HTMLInputElement>(null);
   const deadlineInput = useRef<HTMLInputElement>(null);
   const notesInput = useRef<HTMLTextAreaElement>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
   const orderContext = useContext(OrderContext);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const orderObject = {
+    const orderObject: Order = {
       title: titleInput.current?.value!,
       client: clientInput.current?.value!,
       address: addressInput.current?.value!,
@@ -34,21 +37,30 @@ const NewOrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
       return;
     }
     setIsProcessing(true);
-    const shouldModalBeClosed = await orderContext.addNewOrder(orderObject);
+    let shouldModalBeClosed;
+    if (props.order) {
+      orderObject["id"] = props.order.id!;
+      shouldModalBeClosed = await orderContext.editOrder(
+        orderObject,
+        props.ordinalNumber!
+      );
+    } else {
+      shouldModalBeClosed = await orderContext.addNewOrder(orderObject);
+    }
     if (shouldModalBeClosed) {
+      setIsProcessing(false);
       handleCloseModal();
     }
   };
 
   const handleCloseModal = () => {
-    setIsProcessing(false);
     props.handleClose();
   };
 
   return (
     <Modal show={props.show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title>New Order</Modal.Title>
+        <Modal.Title>{props.order ? "Edit Order" : "New Order"}</Modal.Title>
       </Modal.Header>
       <Form id="orderForm" onSubmit={handleSubmit}>
         <Modal.Body>
@@ -58,11 +70,22 @@ const NewOrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
             <Accordion defaultActiveKey="basic">
               <OrderModalBasic
                 refs={{ title: titleInput, client: clientInput }}
+                values={{
+                  title: props.order?.title,
+                  client: props.order?.client,
+                }}
               />
               <OrderModalShipping
                 refs={{ address: addressInput, deadline: deadlineInput }}
+                values={{
+                  address: props.order?.address,
+                  deadline: props.order?.deadline,
+                }}
               />
-              <OrderModalNotes refs={{ notes: notesInput }} />
+              <OrderModalNotes
+                refs={{ notes: notesInput }}
+                values={{ notes: props.order?.notes }}
+              />
             </Accordion>
           )}
         </Modal.Body>
@@ -79,4 +102,4 @@ const NewOrderModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   );
 };
 
-export default NewOrderModal;
+export default OrderModal;

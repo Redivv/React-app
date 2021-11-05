@@ -9,6 +9,7 @@ const OrderContext = createContext<OrderContextData>({
   areOrdersLoaded: false,
   isActionBeingProcessed: false,
   addNewOrder: () => {},
+  editOrder: () => {},
   deleteOrderById: () => {},
 });
 export const OrderContextProvider: React.FC = (props) => {
@@ -23,10 +24,34 @@ export const OrderContextProvider: React.FC = (props) => {
       authContext.tokenObject?.idToken!,
       orderObject
     )
-      .then(() => {
+      .then((response) => {
+        orderObject["id"] = response.data.name;
         alert("Order Saved");
         setIsActionBeingProcessed(false);
         setDisplayedOrders([...displayedOrders, orderObject]);
+        return true;
+      })
+      .catch((error) => {
+        alert("KURWA");
+        console.log(error.response);
+        setIsActionBeingProcessed(false);
+        return false;
+      });
+    return response;
+  };
+
+  const editOrder = async (orderObject: Order, ordinalNumber: number) => {
+    setIsActionBeingProcessed(true);
+    const response = await OrderRequestService.editOrder(
+      authContext.tokenObject?.idToken!,
+      orderObject
+    )
+      .then(() => {
+        alert("Order Changed");
+        setIsActionBeingProcessed(false);
+        let displayedOrdersClone = displayedOrders;
+        displayedOrders[ordinalNumber] = orderObject;
+        setDisplayedOrders([...displayedOrdersClone]);
         return true;
       })
       .catch((error) => {
@@ -62,14 +87,17 @@ export const OrderContextProvider: React.FC = (props) => {
         setDisplayedOrders([...newDisplayedOrders]);
         setAreOrdersLoaded(true);
       })
-      .catch((error) => console.log(error.response));
-  }, [authContext.tokenObject?.idToken]);
+      .catch((error) => {
+        alert("kek");
+      });
+  }, []);
 
   const contextValues = {
     displayedOrders: displayedOrders,
     areOrdersLoaded: areOrdersLoaded,
     isActionBeingProcessed: isActionBeingProcessed,
     addNewOrder: addNewOrder,
+    editOrder: editOrder,
     deleteOrderById: deleteOrderById,
   };
 

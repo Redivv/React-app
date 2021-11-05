@@ -12,22 +12,34 @@
     text-align: center;
 }
 
-.orderTab>button{
+.orderTab>button {
     cursor: row-resize !important;
 }
 
-.orderTab>button::after{
+.orderTab>button::after {
     margin-left: 1%;
 }
 
-.deleteOrderButton{
-    padding: 2% 3%;
+.editOrderButton {
+    padding: 1% 2%;
+    cursor: pointer;
+    color: green;
     margin-left: auto;
+    font-size: 1.2rem;
+    margin-right: 3%;
+}
+
+.deleteOrderButton {
+    padding: 1% 2%;
     cursor: pointer;
     color: red;
     font-size: 1.2rem;
 }
 
-.deleteOrderButton:hover>i{
+.editOrderButton:hover>i {
+    color: rgb(1, 98, 1);
+}
+
+.deleteOrderButton:hover>i {
     color: rgb(197, 0, 0);
 }
