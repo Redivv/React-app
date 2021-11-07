@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from "react";
 import { Accordion } from "react-bootstrap";
-import OrderContext from "../../../../../store/order-context";
-import Order from "../../../../../types/order";
+import OrderContext from "../../../../../../store/order-context";
+import Order from "../../../../../../types/order";
 import OrderModal from "./OrderModal/OrderModal";
 import classes from "./OrderTab.module.css";
 

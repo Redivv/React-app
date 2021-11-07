@@ -3,8 +3,8 @@ import classes from "./OrdersContainer.module.css";
 import { Accordion, Spinner } from "react-bootstrap";
 import NewOrderButton from "./OrderTab/NewOrderButton";
 import { useEffect, useContext, useState, Fragment } from "react";
-import Order from "../../../../types/order";
-import OrderContext from "../../../../store/order-context";
+import Order from "../../../../../types/order";
+import OrderContext from "../../../../../store/order-context";
 
 const OrdersContainer = () => {
   const orderContext = useContext(OrderContext);

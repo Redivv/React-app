@@ -1,4 +1,4 @@
-import { OrderContextProvider } from "../../../store/order-context";
+import { OrderContextProvider } from "../../../../store/order-context";
 import OrdersContainer from "./Orders/OrdersContainer";
 import classes from "./TableBody.module.css";
 

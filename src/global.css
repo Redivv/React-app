@@ -1,12 +1,13 @@
 body {
     font-size: 20px;
     overflow: hidden;
+    background-color: #3d3d3d;
 }
 
 .h-inherit {
     height: inherit !important;
 }
 
-.ml-auto{
+.ml-auto {
     margin-left: auto !important;
 }
