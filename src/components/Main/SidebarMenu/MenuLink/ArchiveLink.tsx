@@ -14,7 +14,7 @@ const ArchiveLink = () => {
     <React.Fragment>
       <MenuLink onClick={handleShow} isLinkActive={show}>
         <i className="fas fa-file-alt"></i>
-        <span> Archive</span>
+        <span>Archive</span>
       </MenuLink>
       <ArchiveModal show={show} handleClose={handleClose} />
     </React.Fragment>

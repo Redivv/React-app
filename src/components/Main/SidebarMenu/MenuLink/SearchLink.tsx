@@ -14,7 +14,7 @@ const SearchLink = () => {
     <React.Fragment>
       <MenuLink onClick={handleShow} isLinkActive={show}>
         <i className="fas fa-search"></i>
-        <span> Search</span>
+        <span>Search</span>
       </MenuLink>
       <SearchModal show={show} handleClose={handleClose} />
     </React.Fragment>

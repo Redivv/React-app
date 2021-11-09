@@ -14,7 +14,7 @@ const TrashLink = () => {
     <React.Fragment>
       <MenuLink onClick={handleShow} isLinkActive={show}>
         <i className="fas fa-trash-alt"></i>
-        <span> Trash</span>
+        <span>Trash</span>
       </MenuLink>
       <TrashModal show={show} handleClose={handleClose} />
     </React.Fragment>

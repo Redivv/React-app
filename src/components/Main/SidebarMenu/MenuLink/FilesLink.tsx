@@ -14,7 +14,7 @@ const FilesLink = () => {
     <React.Fragment>
       <MenuLink onClick={handleShow} isLinkActive={show}>
         <i className="fas fa-folder-open"></i>
-        <span> Files</span>
+        <span>Files</span>
       </MenuLink>
       <FilesModal show={show} handleClose={handleClose} />
     </React.Fragment>

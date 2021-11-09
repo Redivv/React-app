@@ -18,3 +18,7 @@
     color: black;
     border-color: rgb(0, 172, 230);
 }
+
+.menuLink > span{
+    padding-left: .5rem;
+}

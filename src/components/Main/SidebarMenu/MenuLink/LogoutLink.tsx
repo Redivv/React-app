@@ -14,7 +14,7 @@ const LogoutLink = () => {
     <React.Fragment>
       <MenuLink className="position-absolute bottom-0" onClick={handleLogout}>
         <i className="fas fa-sign-out-alt"></i>
-        <span> Logout</span>
+        <span>Logout</span>
       </MenuLink>
     </React.Fragment>
   );

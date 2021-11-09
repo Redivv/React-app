@@ -13,8 +13,8 @@ const UsersLink = () => {
   return (
     <React.Fragment>
       <MenuLink onClick={handleShow} isLinkActive={show}>
-        <i className="fas fa-user"></i>
-        <span> Users</span>
+        <i className="fas fa-users"></i>
+        <span>Users</span>
       </MenuLink>
       <UsersModal show={show} handleClose={handleClose} />
     </React.Fragment>

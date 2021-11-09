@@ -14,7 +14,7 @@ const NotificationsLink = () => {
     <React.Fragment>
       <MenuLink onClick={handleShow} isLinkActive={show}>
         <i className="fas fa-bell"></i>
-        <span> Notifications</span>
+        <span>Notifications</span>
       </MenuLink>
       <NotificationsModal show={show} handleClose={handleClose} />
     </React.Fragment>

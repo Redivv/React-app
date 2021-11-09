@@ -4,6 +4,7 @@ import OrderContext from "../../../../../../store/order-context";
 import Order from "../../../../../../types/order";
 import OrderModal from "./OrderModal/OrderModal";
 import classes from "./OrderTab.module.css";
+import Task from "./Task/Task";
 
 const OrderTab: React.FC<{
   order: Order;
@@ -15,7 +16,7 @@ const OrderTab: React.FC<{
   const handleClose = () => setShow(false);
   const handleShow = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    setShow(true)
+    setShow(true);
   };
 
   const handleDeleteOrder = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,14 +43,28 @@ const OrderTab: React.FC<{
         </Accordion.Header>
         <Accordion.Body>
           <div className="d-flex">
-            <div className={`col-3 ${classes.tableColumn}`}>dupa</div>
-            <div className={`col-3 ${classes.tableColumn}`}>dupa</div>
-            <div className={`col-3 ${classes.tableColumn}`}>dupa</div>
-            <div className={`col-3 ${classes.tableColumn}`}>dupa</div>
+            <div className={`col-3 ${classes.tableColumn}`}>
+              <Task />
+              <Task />
+            </div>
+            <div className={`col-3 ${classes.tableColumn}`}>
+              <Task />
+            </div>
+            <div className={`col-3 ${classes.tableColumn}`}>
+              <Task />
+            </div>
+            <div className={`col-3 ${classes.tableColumn}`}>
+              <Task />
+            </div>
           </div>
         </Accordion.Body>
       </Accordion.Item>
-      <OrderModal show={show} handleClose={handleClose} order={props.order} ordinalNumber={props.ordinalNumber} />
+      <OrderModal
+        show={show}
+        handleClose={handleClose}
+        order={props.order}
+        ordinalNumber={props.ordinalNumber}
+      />
     </Fragment>
   );
 };
