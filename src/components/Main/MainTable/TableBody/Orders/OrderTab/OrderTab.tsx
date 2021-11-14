@@ -4,6 +4,7 @@ import OrderContext from "../../../../../../store/order-context";
 import Order from "../../../../../../types/order";
 import OrderModal from "./OrderModal/OrderModal";
 import classes from "./OrderTab.module.css";
+import NewTaskButton from "./Task/NewTaskButton";
 import Task from "./Task/Task";
 
 const OrderTab: React.FC<{
@@ -24,10 +25,14 @@ const OrderTab: React.FC<{
     orderContext.deleteOrderById(props.ordinalNumber, props.order.id!);
   };
 
+  const getAllTasks = () => {
+    alert('ładuj');
+  }
+
   return (
     <Fragment>
       <Accordion.Item eventKey={props.order.id!}>
-        <Accordion.Header className={classes.orderTab}>
+        <Accordion.Header className={classes.orderTab} onClick={getAllTasks}>
           <span>{props.order.client} </span>-
           <span> {props.order.deadline}</span>
           <span className={classes.editOrderButton} onClick={handleShow}>
@@ -44,18 +49,13 @@ const OrderTab: React.FC<{
         <Accordion.Body>
           <div className="d-flex">
             <div className={`col-3 ${classes.tableColumn}`}>
-              <Task />
-              <Task />
+              <NewTaskButton parentId={props.order.id!} />
             </div>
             <div className={`col-3 ${classes.tableColumn}`}>
-              <Task />
+              <Task parentId={props.order.id!} />
             </div>
-            <div className={`col-3 ${classes.tableColumn}`}>
-              <Task />
-            </div>
-            <div className={`col-3 ${classes.tableColumn}`}>
-              <Task />
-            </div>
+            <div className={`col-3 ${classes.tableColumn}`}></div>
+            <div className={`col-3 ${classes.tableColumn}`}></div>
           </div>
         </Accordion.Body>
       </Accordion.Item>

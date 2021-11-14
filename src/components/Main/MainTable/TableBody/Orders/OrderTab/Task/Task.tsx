@@ -2,7 +2,9 @@ import { Fragment, useState } from "react";
 import classes from "./Task.module.css";
 import TaskModal from "./TaskModal/TaskModal";
 
-const Task = () => {
+const Task: React.FC<{
+  parentId: string;
+}> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -31,7 +33,11 @@ const Task = () => {
           </div>
         </main>
       </div>
-      <TaskModal show={show} handleClose={handleClose} />
+      <TaskModal
+        parentId={props.parentId}
+        show={show}
+        handleClose={handleClose}
+      />
     </Fragment>
   );
 };
