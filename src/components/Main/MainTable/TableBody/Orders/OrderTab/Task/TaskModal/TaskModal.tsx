@@ -11,6 +11,8 @@ import TaskModalValidation from "./Sections/TaskModalValidation";
 const TaskModal: React.FC<{
   show: boolean;
   handleClose: () => void;
+  handleNewTask?: (taskObject: Task) => void;
+  handleEditTask?: (taskObject: Task, ordinalNumber: number) => void;
   task?: Task;
   ordinalNumber?: number;
   parentId: string;
@@ -24,11 +26,13 @@ const TaskModal: React.FC<{
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    const taskColumnNumber = props.task ? props.task.columnNumber : 0;
     const taskObject: Task = {
       title: titleInput.current?.value!,
       description: descriptionInput.current?.value!,
       terms: validationInput.current?.value!,
       notes: notesInput.current?.value!,
+      columnNumber: taskColumnNumber,
     };
     try {
       TaskValidationService.validateInsert(taskObject);
@@ -37,33 +41,41 @@ const TaskModal: React.FC<{
       return;
     }
     setIsProcessing(true);
-    let shouldModalBeClosed;
     if (props.task) {
       taskObject["id"] = props.task.id!;
-      // shouldModalBeClosed = await orderContext.editOrder(
-      //   orderObject,
-      //   props.ordinalNumber!
-      // );
+      TaskRequestService.editTask(
+        authContext.tokenObject?.idToken!,
+        props.parentId,
+        taskObject
+      )
+        .then(() => {
+          props.handleEditTask!(taskObject, props.ordinalNumber!);
+          alert("Task Changed");
+          setIsProcessing(false);
+          handleCloseModal();
+        })
+        .catch((error) => {
+          alert("KURWA");
+          console.log(error.response);
+          setIsProcessing(false);
+        });
     } else {
-      setIsProcessing(true);
-      const shouldModalBeClosed = await TaskRequestService.addNewTask(
+      TaskRequestService.addNewTask(
         authContext.tokenObject?.idToken!,
         props.parentId,
         taskObject
       )
         .then((response) => {
           taskObject["id"] = response.data.name;
+          props.handleNewTask!(taskObject);
           alert("Task Saved");
           setIsProcessing(false);
           handleCloseModal();
-          // setDisplayedOrders([...displayedOrders, orderObject]);
-          return true;
         })
         .catch((error) => {
           alert("KURWA");
           console.log(error.response);
           setIsProcessing(false);
-          return false;
         });
     }
   };

@@ -1,18 +1,25 @@
 import React, { Fragment, useContext, useState } from "react";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Spinner } from "react-bootstrap";
+import TaskRequestService from "../../../../../../services/TaskRequestService";
+import AuthContext from "../../../../../../store/auth-context";
 import OrderContext from "../../../../../../store/order-context";
 import Order from "../../../../../../types/order";
 import OrderModal from "./OrderModal/OrderModal";
 import classes from "./OrderTab.module.css";
 import NewTaskButton from "./Task/NewTaskButton";
-import Task from "./Task/Task";
+import TaskBlock from "./Task/TaskBlock";
+import Task from "../../../../../../types/task";
 
 const OrderTab: React.FC<{
   order: Order;
   ordinalNumber: number;
 }> = (props) => {
   const orderContext = useContext(OrderContext);
+  const authContext = useContext(AuthContext);
   const [show, setShow] = useState(false);
+  const [childTasks, setChildTasks] = useState<
+    [Task[], Task[], Task[], Task[]] | []
+  >([]);
 
   const handleClose = () => setShow(false);
   const handleShow = (event: React.MouseEvent<HTMLElement>) => {
@@ -26,8 +33,65 @@ const OrderTab: React.FC<{
   };
 
   const getAllTasks = () => {
-    alert('ładuj');
-  }
+    if (childTasks.length !== 0) {
+      return;
+    }
+    let retrivedTasks: [Task[], Task[], Task[], Task[]] = [
+      [] as Task[],
+      [] as Task[],
+      [] as Task[],
+      [] as Task[],
+    ];
+    TaskRequestService.getAllTasksByOrderID(
+      authContext.tokenObject?.idToken!,
+      props.order.id!
+    )
+      .then((response) => {
+        for (const taskId in response.data!) {
+          let currentTask = response.data[taskId];
+          currentTask.id = taskId;
+          const currentTaskColumnNumber = currentTask.columnNumber;
+          retrivedTasks[currentTaskColumnNumber].push(currentTask);
+        }
+        setChildTasks(retrivedTasks);
+      })
+      .catch((error) => console.log(error.response));
+  };
+
+  const handleNewTask = (taskObject: Task) => {
+    let displayedTasksHelper = childTasks;
+    displayedTasksHelper[taskObject.columnNumber] = [
+      taskObject,
+      ...displayedTasksHelper[taskObject.columnNumber],
+    ];
+    setChildTasks([...displayedTasksHelper]);
+  };
+  const handleEditTask = (taskObject: Task, ordinalNumber: number) => {
+    let displayedTasksHelper = childTasks;
+    displayedTasksHelper[taskObject.columnNumber][ordinalNumber] = taskObject;
+    setChildTasks([...displayedTasksHelper]);
+  };
+  const handleDeleteTask = (
+    taskId: string,
+    parentId: string,
+    columnNumber: number,
+    ordinalNumber: number
+  ) => {
+    if (!window.confirm("Confirm deleting the order")) {
+      return;
+    }
+    TaskRequestService.deleteTaskById(
+      authContext.tokenObject?.idToken!,
+      parentId,
+      taskId
+    )
+      .then(() => {
+        let displayedTasksHelper = childTasks;
+        displayedTasksHelper[columnNumber].splice(ordinalNumber, 1);
+        setChildTasks([...displayedTasksHelper]);
+      })
+      .catch((error) => console.log(error.response));
+  };
 
   return (
     <Fragment>
@@ -47,16 +111,68 @@ const OrderTab: React.FC<{
           {/* TODO: deadline to human date / remaining */}
         </Accordion.Header>
         <Accordion.Body>
-          <div className="d-flex">
-            <div className={`col-3 ${classes.tableColumn}`}>
-              <NewTaskButton parentId={props.order.id!} />
+          {childTasks.length !== 0 ? (
+            <div className="d-flex">
+              <div className={`col-3 ${classes.tableColumn}`}>
+                {childTasks[0].map((task, index) => (
+                  <TaskBlock
+                    handleDeleteTask={handleDeleteTask}
+                    handleEditTask={handleEditTask}
+                    task={task}
+                    key={task.id}
+                    ordinalNumber={index}
+                    parentId={props.order.id!}
+                  />
+                ))}
+                <NewTaskButton
+                  handleNewTask={handleNewTask}
+                  parentId={props.order.id!}
+                />
+              </div>
+              <div className={`col-3 ${classes.tableColumn}`}>
+                {childTasks[1].map((task, index) => (
+                  <TaskBlock
+                    handleDeleteTask={handleDeleteTask}
+                    handleEditTask={handleEditTask}
+                    task={task}
+                    key={task.id}
+                    ordinalNumber={index}
+                    parentId={props.order.id!}
+                  />
+                ))}
+              </div>
+              <div className={`col-3 ${classes.tableColumn}`}>
+                {childTasks[2].map((task, index) => (
+                  <TaskBlock
+                    handleDeleteTask={handleDeleteTask}
+                    handleEditTask={handleEditTask}
+                    task={task}
+                    key={task.id}
+                    ordinalNumber={index}
+                    parentId={props.order.id!}
+                  />
+                ))}
+              </div>
+              <div className={`col-3 ${classes.tableColumn}`}>
+                {childTasks[3].map((task, index) => (
+                  <TaskBlock
+                    handleDeleteTask={handleDeleteTask}
+                    handleEditTask={handleEditTask}
+                    task={task}
+                    key={task.id}
+                    ordinalNumber={index}
+                    parentId={props.order.id!}
+                  />
+                ))}
+              </div>
             </div>
-            <div className={`col-3 ${classes.tableColumn}`}>
-              <Task parentId={props.order.id!} />
-            </div>
-            <div className={`col-3 ${classes.tableColumn}`}></div>
-            <div className={`col-3 ${classes.tableColumn}`}></div>
-          </div>
+          ) : (
+            <Spinner
+              animation="border"
+              variant="primary"
+              className="d-block mx-auto mt-3"
+            />
+          )}
         </Accordion.Body>
       </Accordion.Item>
       <OrderModal

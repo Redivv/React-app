@@ -1,9 +1,11 @@
 import { Fragment, useState } from "react";
 import classes from "./NewTaskButton.module.css";
 import TaskModal from "./TaskModal/TaskModal";
+import Task from "../../../../../../../types/task";
 
 const NewTaskButton: React.FC<{
   parentId: string;
+  handleNewTask: (taskObject: Task) => void;
 }> = (props) => {
   const [show, setShow] = useState(false);
 
@@ -20,6 +22,7 @@ const NewTaskButton: React.FC<{
         </main>
       </div>
       <TaskModal
+        handleNewTask={props.handleNewTask}
         parentId={props.parentId}
         show={show}
         handleClose={handleClose}

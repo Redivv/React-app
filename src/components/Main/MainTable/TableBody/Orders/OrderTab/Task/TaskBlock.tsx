@@ -1,22 +1,39 @@
 import { Fragment, useState } from "react";
-import classes from "./Task.module.css";
+import Task from "../../../../../../../types/task";
+import classes from "./TaskBlock.module.css";
 import TaskModal from "./TaskModal/TaskModal";
 
-const Task: React.FC<{
+const TaskBlock: React.FC<{
+  task: Task;
+  ordinalNumber: number;
   parentId: string;
+  handleEditTask: (taskObject: Task, ordinalNumber: number) => void;
+  handleDeleteTask: (
+    taskId: string,
+    parentId: string,
+    columnNumber: number,
+    ordinalNumber: number
+  ) => void;
 }> = (props) => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => {
     setShow(false);
   };
   const handleShow = () => setShow(true);
+  const handleDeleteTask = () => {
+    props.handleDeleteTask(
+      props.task.id!,
+      props.parentId,
+      props.task.columnNumber,
+      props.ordinalNumber
+    );
+  };
 
   return (
     <Fragment>
       <div className={classes.task}>
         <header>
-          <span onClick={handleShow}>Certyfikat Jakości</span>
+          <span onClick={handleShow}>{props.task.title}</span>
         </header>
         <main>
           <div>
@@ -31,15 +48,21 @@ const Task: React.FC<{
             <i className="fas fa-paperclip"></i>
             <span>5</span>
           </div>
+          <div className={classes.actionRow}>
+            <i className="fas fa-trash-alt" onClick={handleDeleteTask}></i>
+          </div>
         </main>
       </div>
       <TaskModal
+        task={props.task}
         parentId={props.parentId}
         show={show}
         handleClose={handleClose}
+        handleEditTask={props.handleEditTask}
+        ordinalNumber={props.ordinalNumber}
       />
     </Fragment>
   );
 };
 
-export default Task;
+export default TaskBlock;
