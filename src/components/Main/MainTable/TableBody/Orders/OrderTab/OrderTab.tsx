@@ -77,7 +77,7 @@ const OrderTab: React.FC<{
     columnNumber: number,
     ordinalNumber: number
   ) => {
-    if (!window.confirm("Confirm deleting the order")) {
+    if (!window.confirm("Confirm deleting the task")) {
       return;
     }
     TaskRequestService.deleteTaskById(
