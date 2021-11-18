@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { DragEvent, Fragment, useContext, useState } from "react";
 import { Accordion, Spinner } from "react-bootstrap";
 import TaskRequestService from "../../../../../../services/TaskRequestService";
 import AuthContext from "../../../../../../store/auth-context";
@@ -93,6 +93,37 @@ const OrderTab: React.FC<{
       .catch((error) => console.log(error.response));
   };
 
+  const allowDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleTaskDrop = (event: DragEvent<HTMLDivElement>) => {
+    const sourceColumnNumber = Number(
+      event.dataTransfer.getData("sourceColumn")
+    );
+    const taskOrdinalNumber = Number(event.dataTransfer.getData("taskNumber"));
+    const targetColumnNumber = Number(
+      event.currentTarget.getAttribute("data-columnumber")
+    );
+    const taskParentId = event.dataTransfer.getData("taskParentId");
+    let displayedTasksHelper = childTasks;
+    const draggedTask =
+      displayedTasksHelper[sourceColumnNumber][taskOrdinalNumber];
+    draggedTask.columnNumber = targetColumnNumber;
+    displayedTasksHelper[sourceColumnNumber].splice(taskOrdinalNumber, 1);
+    displayedTasksHelper[targetColumnNumber] = [
+      draggedTask,
+      ...displayedTasksHelper[targetColumnNumber],
+    ];
+    TaskRequestService.editTask(
+      authContext.tokenObject?.idToken!,
+      taskParentId,
+      draggedTask
+    )
+      .then(() => setChildTasks([...displayedTasksHelper]))
+      .catch((error) => console.log(error.response));
+  };
+
   return (
     <Fragment>
       <Accordion.Item eventKey={props.order.id!}>
@@ -113,7 +144,12 @@ const OrderTab: React.FC<{
         <Accordion.Body>
           {childTasks.length !== 0 ? (
             <div className="d-flex">
-              <div className={`col-3 ${classes.tableColumn}`}>
+              <div
+                className={`col-3 ${classes.tableColumn}`}
+                onDragOver={allowDrop}
+                onDrop={handleTaskDrop}
+                data-columnumber="0"
+              >
                 {childTasks[0].map((task, index) => (
                   <TaskBlock
                     handleDeleteTask={handleDeleteTask}
@@ -129,7 +165,12 @@ const OrderTab: React.FC<{
                   parentId={props.order.id!}
                 />
               </div>
-              <div className={`col-3 ${classes.tableColumn}`}>
+              <div
+                className={`col-3 ${classes.tableColumn}`}
+                onDragOver={allowDrop}
+                onDrop={handleTaskDrop}
+                data-columnumber="1"
+              >
                 {childTasks[1].map((task, index) => (
                   <TaskBlock
                     handleDeleteTask={handleDeleteTask}
@@ -141,7 +182,12 @@ const OrderTab: React.FC<{
                   />
                 ))}
               </div>
-              <div className={`col-3 ${classes.tableColumn}`}>
+              <div
+                className={`col-3 ${classes.tableColumn}`}
+                onDragOver={allowDrop}
+                onDrop={handleTaskDrop}
+                data-columnumber="2"
+              >
                 {childTasks[2].map((task, index) => (
                   <TaskBlock
                     handleDeleteTask={handleDeleteTask}
@@ -153,7 +199,12 @@ const OrderTab: React.FC<{
                   />
                 ))}
               </div>
-              <div className={`col-3 ${classes.tableColumn}`}>
+              <div
+                className={`col-3 ${classes.tableColumn}`}
+                onDragOver={allowDrop}
+                onDrop={handleTaskDrop}
+                data-columnumber="3"
+              >
                 {childTasks[3].map((task, index) => (
                   <TaskBlock
                     handleDeleteTask={handleDeleteTask}

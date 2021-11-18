@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { DragEvent, Fragment, useState } from "react";
 import Task from "../../../../../../../types/task";
 import classes from "./TaskBlock.module.css";
 import TaskModal from "./TaskModal/TaskModal";
@@ -29,9 +29,19 @@ const TaskBlock: React.FC<{
     );
   };
 
+  const handleDragTask = (event: DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData("sourceColumn", String(props.task.columnNumber));
+    event.dataTransfer.setData("taskNumber", String(props.ordinalNumber));
+    event.dataTransfer.setData("taskParentId", props.parentId);
+  };
+
   return (
     <Fragment>
-      <div className={classes.task}>
+      <div
+        draggable="true"
+        onDragStart={handleDragTask}
+        className={classes.task}
+      >
         <header>
           <span onClick={handleShow}>{props.task.title}</span>
         </header>
