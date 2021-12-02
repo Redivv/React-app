@@ -17,8 +17,6 @@ const SidebarMenu: React.FC<{ className: string }> = (props) => {
       <UsersLink />
       <SearchLink />
       <ArchiveLink />
-      {/* <FilesLink /> */}
-      {/* <TrashLink /> */}
       <LogoutLink />
     </aside>
   );
