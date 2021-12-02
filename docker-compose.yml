@@ -10,5 +10,14 @@ services:
     volumes:
       - ./front:/home/node/app
       - react-modules:/home/node/app/node_modules
-volumes: 
+  backend:
+    image: thesis-backend-dev
+    build: ./back
+    ports:
+      - 8000:80
+    volumes:
+      - ./back:/var/www/html
+      - lumen-vendor:/var/www/html/vendor
+volumes:
   react-modules:
+  lumen-vendor:
