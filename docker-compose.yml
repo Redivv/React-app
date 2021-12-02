@@ -18,6 +18,15 @@ services:
     volumes:
       - ./back:/var/www/html
       - lumen-vendor:/var/www/html/vendor
+  db:
+    image: mariadb:10.7.1
+    env_file:
+      - db/.env
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb-store:/var/lib/mysql
 volumes:
   react-modules:
   lumen-vendor:
+  mariadb-store:
