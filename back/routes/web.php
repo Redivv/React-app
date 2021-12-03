@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,5 +16,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return "penis";
+    foreach (User::all() as $user) {
+        echo $user->name;
+    }
 });
