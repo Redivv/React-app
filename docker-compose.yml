@@ -17,7 +17,9 @@ services:
       - 8000:80
     volumes:
       - ./back:/var/www/html
+      - ./back/docker/php-overrides.ini:/usr/local/etc/php/conf.d/php-overrides.ini
       - lumen-vendor:/var/www/html/vendor
+      - lumen-cache:/var/www/html/storage/framework/cache
   db:
     image: mariadb:10.7.1
     env_file:
@@ -29,4 +31,5 @@ services:
 volumes:
   react-modules:
   lumen-vendor:
+  lumen-cache:
   mariadb-store:

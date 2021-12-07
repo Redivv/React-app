@@ -1,0 +1,1 @@
+docker exec -i thesis_backend_1 php %*
