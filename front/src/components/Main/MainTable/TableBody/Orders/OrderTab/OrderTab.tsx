@@ -43,7 +43,7 @@ const OrderTab: React.FC<{
       [] as Task[],
     ];
     TaskRequestService.getAllTasksByOrderID(
-      authContext.tokenObject?.idToken!,
+      authContext.accessToken!,
       props.order.id!
     )
       .then((response) => {
@@ -81,7 +81,7 @@ const OrderTab: React.FC<{
       return;
     }
     TaskRequestService.deleteTaskById(
-      authContext.tokenObject?.idToken!,
+      authContext.accessToken!,
       parentId,
       taskId
     )
@@ -116,7 +116,7 @@ const OrderTab: React.FC<{
       ...displayedTasksHelper[targetColumnNumber],
     ];
     TaskRequestService.editTask(
-      authContext.tokenObject?.idToken!,
+      authContext.accessToken!,
       taskParentId,
       draggedTask
     )
@@ -129,7 +129,7 @@ const OrderTab: React.FC<{
       <Accordion.Item eventKey={props.order.id!}>
         <Accordion.Header className={classes.orderTab} onClick={getAllTasks}>
           <span>{props.order.client} </span>-
-          <span> {props.order.deadline}</span>
+          <span> {props.order.shipping_deadline}</span>
           <span className={classes.editOrderButton} onClick={handleShow}>
             <i className="fas fa-edit"></i>
           </span>

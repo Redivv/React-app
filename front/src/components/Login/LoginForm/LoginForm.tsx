@@ -16,10 +16,7 @@ const LoginForm = () => {
         loginMailInput.current.value,
         loginPasswordInput.current.value
       ).then((response) => {
-        authContext.login({
-          idToken: response.data.idToken,
-          refreshToken: response.data.refreshToken,
-        });
+        authContext.login(response.data.access_token);
       });
     }
   };

@@ -2,73 +2,65 @@ import axios from "axios";
 import React, { createContext, useState } from "react";
 import TokenRequestService from "../services/TokenRequestService";
 import AuthContextData from "../types/authContextData";
-import AuthTokensObject from "../types/authTokensObject";
 
 const AuthContext = createContext<AuthContextData>({
-  tokenObject: { idToken: null, refreshToken: null },
+  accessToken: null,
   isLoggedIn: false,
   login: () => {},
   logout: () => {},
 });
 
-const retriveStoredTokenData = (): AuthTokensObject => {
-  return {
-    idToken: localStorage.getItem("userToken"),
-    refreshToken: localStorage.getItem("refreshToken"),
-  };
+const retriveStoredTokenData = (): string | null => {
+  return localStorage.getItem("userToken");
 };
 
 export const AuthContextProvider: React.FC = (props) => {
-  const tokenData = retriveStoredTokenData();
-  const [tokenObject, setToken] = useState(tokenData);
+  const [accessToken, setToken] = useState(retriveStoredTokenData());
 
-  if (tokenObject.idToken) {
+  if (accessToken) {
     axios.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalConfig = error.config;
         if (error.response?.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
-          if (!tokenObject.refreshToken) {
-            logoutHandler();
-            return Promise.reject(error);
-          }
           const response = await TokenRequestService.tokenRefreshRequest(
-            tokenObject.refreshToken
+            accessToken
           );
-          loginHandler({
-            idToken: response.data.id_token,
-            refreshToken: response.data.refresh_token,
-          });
+          loginHandler(response.data.access_token);
           let errorUrl = new URL(originalConfig.url);
-          errorUrl.searchParams.set("auth", response.data.id_token);
+          errorUrl.searchParams.set("token", response.data.access_token);
           originalConfig["url"] = errorUrl.toString();
           return await axios.request(originalConfig);
+        } else if (
+          (error.response?.status === 401 && originalConfig._retry) ||
+          originalConfig.url ===
+            process.env.REACT_APP_REFRESH_TOKEN_ROUTE!.replace(
+              "<ID_TOKEN>",
+              accessToken
+            )
+        ) {
+          logoutHandler();
         }
         return Promise.reject(error);
       }
     );
   }
 
-  const loginHandler = (tokensObject: AuthTokensObject) => {
-    setToken(tokensObject);
-    localStorage.setItem("userToken", tokensObject.idToken!);
-    localStorage.setItem("refreshToken", tokensObject.refreshToken!);
+  const loginHandler = (accessToken: string) => {
+    setToken(accessToken);
+    localStorage.setItem("userToken", accessToken);
   };
 
   const logoutHandler = () => {
-    setToken({
-      idToken: null,
-      refreshToken: null,
-    });
+    setToken(null);
     localStorage.removeItem("userToken");
-    localStorage.removeItem("refreshToken");
     axios.interceptors.response.eject(0);
   };
 
   const contextValues = {
-    tokenObject: tokenObject,
-    isLoggedIn: !!tokenObject.idToken,
+    accessToken: accessToken,
+    isLoggedIn: !!accessToken,
     login: loginHandler,
     logout: logoutHandler,
   };

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CorsMiddleware;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -72,9 +74,9 @@ $app->configure('auth');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    CorsMiddleware::class
+]);
 
 $app->routeMiddleware([
     'jwt' => App\Http\Middleware\Authenticate::class,

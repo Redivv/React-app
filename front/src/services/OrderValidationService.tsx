@@ -5,8 +5,8 @@ class OrderValidationService {
     if (
       !orderObject.title ||
       !orderObject.client ||
-      !orderObject.address ||
-      !orderObject.deadline
+      !orderObject.shipping_address ||
+      !orderObject.shipping_deadline
     ) {
       throw new Error("Fill all required fields");
     }

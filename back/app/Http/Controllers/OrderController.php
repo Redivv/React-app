@@ -9,6 +9,6 @@ class OrderController extends Controller
 {
     public function all()
     {
-        return response()->json(Order::all()->keyBy('id'));
+        return response()->json(Order::all());
     }
 }

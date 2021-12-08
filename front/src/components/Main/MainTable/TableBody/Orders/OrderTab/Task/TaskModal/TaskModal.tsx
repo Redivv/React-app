@@ -44,7 +44,7 @@ const TaskModal: React.FC<{
     if (props.task) {
       taskObject["id"] = props.task.id!;
       TaskRequestService.editTask(
-        authContext.tokenObject?.idToken!,
+        authContext.accessToken!,
         props.parentId,
         taskObject
       )
@@ -61,7 +61,7 @@ const TaskModal: React.FC<{
         });
     } else {
       TaskRequestService.addNewTask(
-        authContext.tokenObject?.idToken!,
+        authContext.accessToken!,
         props.parentId,
         taskObject
       )

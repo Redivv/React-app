@@ -26,8 +26,8 @@ const OrderModal: React.FC<{
     const orderObject: Order = {
       title: titleInput.current?.value!,
       client: clientInput.current?.value!,
-      address: addressInput.current?.value!,
-      deadline: deadlineInput.current?.value!,
+      shipping_address: addressInput.current?.value!,
+      shipping_deadline: deadlineInput.current?.value!,
       notes: notesInput.current?.value!,
     };
     try {
@@ -78,8 +78,8 @@ const OrderModal: React.FC<{
               <OrderModalShipping
                 refs={{ address: addressInput, deadline: deadlineInput }}
                 values={{
-                  address: props.order?.address,
-                  deadline: props.order?.deadline,
+                  address: props.order?.shipping_address,
+                  deadline: props.order?.shipping_deadline,
                 }}
               />
               <OrderModalNotes

@@ -5,7 +5,7 @@ class OrderRequestService {
   getAllCurrentOrders(idToken: string) {
     return axios.get<Order[] | null>(
       process.env
-        .REACT_APP_FIREBASE_DB_API_ROUTE!.replace("<DB_ROUTE>", "/orders.json")
+        .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", "/orders")
         .replace("<ID_TOKEN>", idToken)
     );
   }

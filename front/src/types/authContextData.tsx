@@ -1,9 +1,7 @@
-import AuthTokensObject from './authTokensObject';
-
 type AuthContextData = {
-  tokenObject: AuthTokensObject | null;
+  accessToken: string | null;
   isLoggedIn: boolean;
-  login: (tokensObject: AuthTokensObject) => void;
+  login: (accessToken: string) => void;
   logout: () => void;
 };
 

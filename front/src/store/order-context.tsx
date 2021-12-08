@@ -21,7 +21,7 @@ export const OrderContextProvider: React.FC = (props) => {
   const addNewOrder = async (orderObject: Order) => {
     setIsActionBeingProcessed(true);
     const response = await OrderRequestService.addNewOrder(
-      authContext.tokenObject?.idToken!,
+      authContext.accessToken!,
       orderObject
     )
       .then((response) => {
@@ -43,7 +43,7 @@ export const OrderContextProvider: React.FC = (props) => {
   const editOrder = async (orderObject: Order, ordinalNumber: number) => {
     setIsActionBeingProcessed(true);
     const response = await OrderRequestService.editOrder(
-      authContext.tokenObject?.idToken!,
+      authContext.accessToken!,
       orderObject
     )
       .then(() => {
@@ -71,20 +71,16 @@ export const OrderContextProvider: React.FC = (props) => {
     displayedOrdersClone.splice(ordinalNumber, 1);
     setDisplayedOrders([...displayedOrdersClone]);
     OrderRequestService.deleteOrderById(
-      authContext.tokenObject?.idToken!,
+      authContext.accessToken!,
       objectId
     ).catch((error) => alert(error.response));
     // TODO: handle error - rollback delete
   };
 
   useEffect(() => {
-    OrderRequestService.getAllCurrentOrders(authContext.tokenObject?.idToken!)
+    OrderRequestService.getAllCurrentOrders(authContext.accessToken!)
       .then((response) => {
-        let newDisplayedOrders = [];
-        for (const orderId in response.data!) {
-          newDisplayedOrders.push({ id: orderId, ...response.data[orderId] });
-        }
-        setDisplayedOrders([...newDisplayedOrders]);
+        setDisplayedOrders([...response.data!]);
         setAreOrdersLoaded(true);
       })
       .catch((error) => {
