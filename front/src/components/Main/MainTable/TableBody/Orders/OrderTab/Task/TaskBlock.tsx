@@ -24,17 +24,19 @@ const TaskBlock: React.FC<{
     props.handleDeleteTask(
       props.task.id!,
       props.parentId,
-      props.task.columnNumber,
+      props.task.column_number,
       props.ordinalNumber
     );
   };
 
   const handleDragTask = (event: DragEvent<HTMLDivElement>) => {
-    event.dataTransfer.setData("sourceColumn", String(props.task.columnNumber));
+    event.dataTransfer.setData(
+      "sourceColumn",
+      String(props.task.column_number)
+    );
     event.dataTransfer.setData("taskNumber", String(props.ordinalNumber));
     event.dataTransfer.setData("taskParentId", props.parentId);
   };
-
   return (
     <Fragment>
       <div

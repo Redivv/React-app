@@ -38,5 +38,17 @@ Route::group([
         'prefix' => 'orders'
     ], function () {
         Route::get('/', 'OrderController@all');
+        Route::post('/', 'OrderController@create');
+        Route::put('/', 'OrderController@update');
+        Route::delete('/{orderId:[0-9]+}', 'OrderController@delete');
+        Route::group([
+            'prefix' => '{orderId:[0-9]+}/tasks'
+        ], function () {
+            Route::get('/', 'TaskController@all');
+            Route::post('/', 'TaskController@create');
+            Route::put('/', 'TaskController@update');
+            Route::put('/{taskId:[0-9]+}', 'TaskController@updateColumn');
+            Route::delete('/{taskId:[0-9]+}', 'TaskController@delete');
+        });
     });
 });

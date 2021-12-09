@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\ConvertEmptyStringToNull;
 use App\Http\Middleware\CorsMiddleware;
+use PHPUnit\TextUI\XmlConfiguration\ConvertLogTypes;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -75,7 +77,8 @@ $app->configure('auth');
 */
 
 $app->middleware([
-    CorsMiddleware::class
+    CorsMiddleware::class,
+    ConvertEmptyStringToNull::class
 ]);
 
 $app->routeMiddleware([

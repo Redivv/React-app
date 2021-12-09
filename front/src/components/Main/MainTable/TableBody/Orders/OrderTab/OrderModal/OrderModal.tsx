@@ -38,7 +38,7 @@ const OrderModal: React.FC<{
     }
     setIsProcessing(true);
     let shouldModalBeClosed;
-    if (props.order) {
+    if (props.order?.id) {
       orderObject["id"] = props.order.id!;
       shouldModalBeClosed = await orderContext.editOrder(
         orderObject,
@@ -47,8 +47,8 @@ const OrderModal: React.FC<{
     } else {
       shouldModalBeClosed = await orderContext.addNewOrder(orderObject);
     }
+    setIsProcessing(false);
     if (shouldModalBeClosed) {
-      setIsProcessing(false);
       handleCloseModal();
     }
   };
@@ -60,34 +60,40 @@ const OrderModal: React.FC<{
   return (
     <Modal show={props.show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title>{props.order ? "Edit Order" : "New Order"}</Modal.Title>
+        <Modal.Title>
+          {props.order?.id ? "Edit Order" : "New Order"}
+        </Modal.Title>
       </Modal.Header>
       <Form id="orderForm" onSubmit={handleSubmit}>
         <Modal.Body>
-          {isProcessing ? (
-            <Spinner animation="border" variant="primary" />
-          ) : (
-            <Accordion defaultActiveKey="basic">
-              <OrderModalBasic
-                refs={{ title: titleInput, client: clientInput }}
-                values={{
-                  title: props.order?.title,
-                  client: props.order?.client,
-                }}
-              />
-              <OrderModalShipping
-                refs={{ address: addressInput, deadline: deadlineInput }}
-                values={{
-                  address: props.order?.shipping_address,
-                  deadline: props.order?.shipping_deadline,
-                }}
-              />
-              <OrderModalNotes
-                refs={{ notes: notesInput }}
-                values={{ notes: props.order?.notes }}
-              />
-            </Accordion>
-          )}
+          <Spinner
+            className={isProcessing ? "" : "d-none"}
+            animation="border"
+            variant="primary"
+          />
+          <Accordion
+            defaultActiveKey="basic"
+            className={isProcessing ? "d-none" : ""}
+          >
+            <OrderModalBasic
+              refs={{ title: titleInput, client: clientInput }}
+              values={{
+                title: props.order?.title,
+                client: props.order?.client,
+              }}
+            />
+            <OrderModalShipping
+              refs={{ address: addressInput, deadline: deadlineInput }}
+              values={{
+                address: props.order?.shipping_address,
+                deadline: props.order?.shipping_deadline,
+              }}
+            />
+            <OrderModalNotes
+              refs={{ notes: notesInput }}
+              values={{ notes: props.order?.notes }}
+            />
+          </Accordion>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" type="reset" onClick={handleCloseModal}>

@@ -2,9 +2,10 @@ type Task = {
   id?: string;
   title: string;
   description: string;
-  terms: string;
+  validation_terms: string;
+  validation_comments: string;
   notes: string;
-  columnNumber: number;
+  column_number: number;
 };
 
 export default Task;

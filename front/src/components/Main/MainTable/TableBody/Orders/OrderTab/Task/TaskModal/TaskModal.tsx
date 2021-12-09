@@ -19,20 +19,22 @@ const TaskModal: React.FC<{
 }> = (props) => {
   const titleInput = useRef<HTMLInputElement>(null);
   const descriptionInput = useRef<HTMLTextAreaElement>(null);
-  const validationInput = useRef<HTMLTextAreaElement>(null);
+  const validationTermsInput = useRef<HTMLTextAreaElement>(null);
+  const validationCommentsInput = useRef<HTMLTextAreaElement>(null);
   const notesInput = useRef<HTMLTextAreaElement>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const authContext = useContext(AuthContext);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const taskColumnNumber = props.task ? props.task.columnNumber : 0;
+    const taskColumnNumber = props.task ? props.task.column_number : 0;
     const taskObject: Task = {
       title: titleInput.current?.value!,
       description: descriptionInput.current?.value!,
-      terms: validationInput.current?.value!,
+      validation_terms: validationTermsInput.current?.value!,
+      validation_comments: validationCommentsInput.current?.value!,
       notes: notesInput.current?.value!,
-      columnNumber: taskColumnNumber,
+      column_number: taskColumnNumber,
     };
     try {
       TaskValidationService.validateInsert(taskObject);
@@ -41,7 +43,7 @@ const TaskModal: React.FC<{
       return;
     }
     setIsProcessing(true);
-    if (props.task) {
+    if (props.task?.id) {
       taskObject["id"] = props.task.id!;
       TaskRequestService.editTask(
         authContext.accessToken!,
@@ -56,7 +58,7 @@ const TaskModal: React.FC<{
         })
         .catch((error) => {
           alert("KURWA");
-          console.log(error.response);
+          console.log(error.response.data);
           setIsProcessing(false);
         });
     } else {
@@ -74,7 +76,7 @@ const TaskModal: React.FC<{
         })
         .catch((error) => {
           alert("KURWA");
-          console.log(error.response);
+          console.log(error.response.data);
           setIsProcessing(false);
         });
     }
@@ -87,35 +89,44 @@ const TaskModal: React.FC<{
   return (
     <Modal show={props.show} onHide={props.handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>{props.task ? "Edit Task" : "New Task"}</Modal.Title>
+        <Modal.Title>{props.task?.id ? "Edit Task" : "New Task"}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form id="taskForm" onSubmit={handleSubmit}>
-          {isProcessing ? (
-            <Spinner animation="border" variant="primary" />
-          ) : (
-            <Accordion defaultActiveKey="basic">
-              <TaskModalBasic
-                refs={{ title: titleInput, description: descriptionInput }}
-                values={{
-                  title: props.task?.title,
-                  description: props.task?.description,
-                }}
-              />
-              <TaskModalValidation
-                refs={{ terms: validationInput }}
-                values={{
-                  terms: props.task?.terms,
-                }}
-              />
-              <TaskModalNotes
-                refs={{ notes: notesInput }}
-                values={{ notes: props.task?.notes }}
-              />
-            </Accordion>
-          )}
-        </Form>
-      </Modal.Body>
+
+      <Form id="taskForm" onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Spinner
+            className={isProcessing ? "" : "d-none"}
+            animation="border"
+            variant="primary"
+          />
+          <Accordion
+            defaultActiveKey="basic"
+            className={isProcessing ? "d-none" : ""}
+          >
+            <TaskModalBasic
+              refs={{ title: titleInput, description: descriptionInput }}
+              values={{
+                title: props.task?.title,
+                description: props.task?.description,
+              }}
+            />
+            <TaskModalValidation
+              refs={{
+                terms: validationTermsInput,
+                comments: validationCommentsInput,
+              }}
+              values={{
+                terms: props.task?.validation_terms,
+                comments: props.task?.validation_comments,
+              }}
+            />
+            <TaskModalNotes
+              refs={{ notes: notesInput }}
+              values={{ notes: props.task?.notes }}
+            />
+          </Accordion>
+        </Modal.Body>
+      </Form>
       <Modal.Footer>
         <Button variant="secondary" onClick={props.handleClose}>
           Close

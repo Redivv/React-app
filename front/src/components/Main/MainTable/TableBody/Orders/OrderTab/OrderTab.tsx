@@ -49,8 +49,7 @@ const OrderTab: React.FC<{
       .then((response) => {
         for (const taskId in response.data!) {
           let currentTask = response.data[taskId];
-          currentTask.id = taskId;
-          const currentTaskColumnNumber = currentTask.columnNumber;
+          const currentTaskColumnNumber = currentTask.column_number;
           retrivedTasks[currentTaskColumnNumber].push(currentTask);
         }
         setChildTasks(retrivedTasks);
@@ -60,15 +59,15 @@ const OrderTab: React.FC<{
 
   const handleNewTask = (taskObject: Task) => {
     let displayedTasksHelper = childTasks;
-    displayedTasksHelper[taskObject.columnNumber] = [
+    displayedTasksHelper[taskObject.column_number] = [
       taskObject,
-      ...displayedTasksHelper[taskObject.columnNumber],
+      ...displayedTasksHelper[taskObject.column_number],
     ];
     setChildTasks([...displayedTasksHelper]);
   };
   const handleEditTask = (taskObject: Task, ordinalNumber: number) => {
     let displayedTasksHelper = childTasks;
-    displayedTasksHelper[taskObject.columnNumber][ordinalNumber] = taskObject;
+    displayedTasksHelper[taskObject.column_number][ordinalNumber] = taskObject;
     setChildTasks([...displayedTasksHelper]);
   };
   const handleDeleteTask = (
@@ -80,17 +79,17 @@ const OrderTab: React.FC<{
     if (!window.confirm("Confirm deleting the task")) {
       return;
     }
+    let displayedTasksHelper = childTasks;
+    displayedTasksHelper[columnNumber].splice(ordinalNumber, 1);
+    setChildTasks([...displayedTasksHelper]);
     TaskRequestService.deleteTaskById(
       authContext.accessToken!,
       parentId,
       taskId
-    )
-      .then(() => {
-        let displayedTasksHelper = childTasks;
-        displayedTasksHelper[columnNumber].splice(ordinalNumber, 1);
-        setChildTasks([...displayedTasksHelper]);
-      })
-      .catch((error) => console.log(error.response));
+    ).catch((error) => {
+      alert("KURWA");
+      console.log(error.response.data);
+    });
   };
 
   const allowDrop = (event: DragEvent<HTMLDivElement>) => {
@@ -109,19 +108,22 @@ const OrderTab: React.FC<{
     let displayedTasksHelper = childTasks;
     const draggedTask =
       displayedTasksHelper[sourceColumnNumber][taskOrdinalNumber];
-    draggedTask.columnNumber = targetColumnNumber;
+    draggedTask.column_number = targetColumnNumber;
     displayedTasksHelper[sourceColumnNumber].splice(taskOrdinalNumber, 1);
     displayedTasksHelper[targetColumnNumber] = [
       draggedTask,
       ...displayedTasksHelper[targetColumnNumber],
     ];
-    TaskRequestService.editTask(
+    setChildTasks([...displayedTasksHelper]);
+    TaskRequestService.editTaskColumnNumber(
       authContext.accessToken!,
       taskParentId,
-      draggedTask
-    )
-      .then(() => setChildTasks([...displayedTasksHelper]))
-      .catch((error) => console.log(error.response));
+      draggedTask.id!,
+      draggedTask.column_number
+    ).catch((error) => {
+      alert("KURWA");
+      console.log(error.response.data);
+    });
   };
 
   return (

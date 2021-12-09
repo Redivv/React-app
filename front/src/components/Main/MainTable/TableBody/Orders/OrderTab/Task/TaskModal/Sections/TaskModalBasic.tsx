@@ -25,7 +25,7 @@ const TaskModalBasic: React.FC<{
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="descriptionInput">
-          <Form.Label className="fw-bold">Description</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Control
             as="textarea"
             placeholder="Task description"

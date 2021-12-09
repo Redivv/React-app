@@ -32,9 +32,9 @@ export const OrderContextProvider: React.FC = (props) => {
         return true;
       })
       .catch((error) => {
-        alert("KURWA");
-        console.log(error.response);
         setIsActionBeingProcessed(false);
+        alert("KURWA");
+        console.log(error.response.data);
         return false;
       });
     return response;
@@ -56,8 +56,8 @@ export const OrderContextProvider: React.FC = (props) => {
       })
       .catch((error) => {
         alert("KURWA");
-        console.log(error.response);
         setIsActionBeingProcessed(false);
+        console.log(error.response.data);
         return false;
       });
     return response;

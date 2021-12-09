@@ -6,17 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
+    protected $fillable = ['title', 'client', 'shipping_address', 'shipping_deadline', 'notes'];
     protected $hidden = [];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class)->get();
+    }
 }
