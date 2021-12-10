@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import MenuLink from "./MenuLink";
-import UsersModal from "./MenuModals/UsersModal";
+import UsersModal from "./MenuModals/UsersModal/UsersModal";
 
 const UsersLink = () => {
   const [show, setShow] = useState(false);

@@ -1,10 +1,8 @@
 import React from "react";
 import ArchiveLink from "./MenuLink/ArchiveLink";
-import FilesLink from "./MenuLink/FilesLink";
 import LogoutLink from "./MenuLink/LogoutLink";
 import NotificationsLink from "./MenuLink/NotificationsLink";
 import SearchLink from "./MenuLink/SearchLink";
-import TrashLink from "./MenuLink/ThrashLink";
 import UsersLink from "./MenuLink/UsersLink";
 import classes from "./SidebarMenu.module.css";
 

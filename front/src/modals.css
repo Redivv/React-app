@@ -27,7 +27,7 @@
     font-size: 1rem;
 }
 
-.modal-body>.spinner-border{
+.modal-body .spinner-border{
     width: 4rem;
     height: 4rem;
     border: .4em solid currentColor;
