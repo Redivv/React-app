@@ -1,7 +1,7 @@
 import React from "react";
-import ResetPasswordForm from "../components/ResetPassword/resetPasswordForm";
 import useQuery from "../hooks/useQuery";
 import { useHistory } from "react-router-dom";
+import ResetPasswordForm from "../components/UserForms/ResetPassword/ResetPasswordForm";
 
 const ResetPassword: React.FC = () => {
   const params = useQuery();

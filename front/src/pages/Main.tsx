@@ -1,6 +1,6 @@
 import React from "react";
-import SidebarMenu from "../components/Main/SidebarMenu/SidebarMenu";
 import MainTable from "../components/Main/MainTable/MainTable";
+import SidebarMenu from "../components/Main/SidebarMenu/SidebarMenu";
 import "../modals.css";
 
 const Main: React.FC = () => {

@@ -1,6 +1,5 @@
 import React from "react";
-import ForgotPasswordForm from "../components/ForgotPassword/forgotPasswordForm";
-
+import ForgotPasswordForm from "../components/UserForms/ForgotPassword/ForgotPasswordForm";
 const ForgotPassword: React.FC = () => {
   return (
     <div className="container vh-100">

@@ -1,8 +1,9 @@
 import React, { useRef, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
-import TokenRequestService from "../../../services/TokenRequestService";
-import AuthContext from "../../../store/auth-context";
-import classes from "./LoginForm.module.css";
+import { Link } from "react-router-dom";
+import TokenRequestService from "../../../../services/TokenRequestService";
+import AuthContext from "../../../../store/auth-context";
+import classes from "../../UserForm.module.css";
 
 const LoginForm = () => {
   const loginMailInput = useRef<HTMLInputElement>(null);
@@ -22,7 +23,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Form onSubmit={formSubmitHandler} className={classes.loginForm}>
+    <Form onSubmit={formSubmitHandler} className={classes.userForm}>
       <Form.Group controlId="mailInput">
         <Form.Label>Mail</Form.Label>
         <Form.Control
@@ -32,7 +33,7 @@ const LoginForm = () => {
           ref={loginMailInput}
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="passwordInput">
+      <Form.Group controlId="passwordInput">
         <Form.Label>Password</Form.Label>
         <Form.Control
           type="password"
@@ -40,6 +41,7 @@ const LoginForm = () => {
           ref={loginPasswordInput}
         />
       </Form.Group>
+      <Link className="d-block mb-3" to="/forgot">Forgot Password?</Link>
       <Button type="submit" className="btn">
         Login
       </Button>

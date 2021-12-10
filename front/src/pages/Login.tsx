@@ -1,6 +1,6 @@
 import React from "react";
-import LoginForm from "../components/Login/LoginForm/LoginForm";
-import LoginHeader from "../components/Login/LoginHeader/LoginHeader";
+import LoginForm from "../components/UserForms/Login/LoginForm/LoginForm";
+import LoginHeader from "../components/UserForms/Login/LoginHeader/LoginHeader";
 
 const Login: React.FC = () => {
   return (

@@ -1,6 +1,7 @@
 import React, { useRef, useState, Fragment } from "react";
 import { Form, Button, Spinner } from "react-bootstrap";
-import classes from "./ResetPasswordForm.module.css";
+import { Link } from "react-router-dom";
+import classes from "../UserForm.module.css";
 
 const ResetPasswordForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -23,9 +24,7 @@ const ResetPasswordForm = () => {
       />
       <Form
         onSubmit={formSubmitHandler}
-        className={
-          classes.resetPasswordForm + " " + (isProcessing ? "d-none" : "")
-        }
+        className={classes.userForm + " " + (isProcessing ? "d-none" : "")}
       >
         <Form.Group controlId="passwordInput">
           <Form.Label>New Password</Form.Label>
@@ -39,12 +38,14 @@ const ResetPasswordForm = () => {
         <Form.Group controlId="confirmPasswordInput">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
-            className="mb-3"
             type="password"
             placeholder="Confirm Password"
             ref={resetPasswordConfirmPasswordInput}
           />
         </Form.Group>
+        <Link className="d-block mb-3" to="/login">
+          Return To Login Form
+        </Link>
         <Button type="submit" className="btn">
           Confirm Password Change
         </Button>

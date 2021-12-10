@@ -1,6 +1,7 @@
 import React, { Fragment, useRef, useState } from "react";
 import { Form, Button, Spinner } from "react-bootstrap";
-import classes from "./ForgotPasswordForm.module.css";
+import { Link } from "react-router-dom";
+import classes from "../UserForm.module.css";
 
 const ForgotPasswordForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -22,19 +23,19 @@ const ForgotPasswordForm = () => {
       />
       <Form
         onSubmit={formSubmitHandler}
-        className={
-          classes.forgotPasswordForm + " " + (isProcessing ? "d-none" : "")
-        }
+        className={classes.userForm + " " + (isProcessing ? "d-none" : "")}
       >
         <Form.Group controlId="mailInput">
           <Form.Label>Mail</Form.Label>
           <Form.Control
-            className="mb-3"
             type="text"
             placeholder="Email Address"
             ref={forgotPasswordMailInput}
           />
         </Form.Group>
+        <Link className="d-block mb-3" to="/login">
+          Return To Login Form
+        </Link>
         <Button type="submit" className="btn">
           Send Password Reset Link
         </Button>
