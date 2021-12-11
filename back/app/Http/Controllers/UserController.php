@@ -21,12 +21,11 @@ class UserController extends Controller
         $this->validate($request, [
             "email" => ["required", "email", "unique:users"]
         ]);
-        $userRandomPassword = str_random(8);
         User::create([
             "email" => $request->email,
-            "password" => Hash::make($userRandomPassword)
+            "password" => Hash::make(str_random(12))
         ]);
-        Mail::to($request->email)->send(new AccountCreated($userRandomPassword));
+        Mail::to($request->email)->send(new AccountCreated());
         return response('Created', 201);
     }
 
