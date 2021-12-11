@@ -21,6 +21,8 @@ Route::group([
 ], function () {
     Route::post('login', 'AuthController@login');
     Route::post('refresh', 'AuthController@refresh');
+    Route::post('password/reset-request', 'RequestPasswordController@sendResetLinkEmail');
+    Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswordController@reset']);
     Route::group([
         'middleware' => 'jwt',
     ], function () {
@@ -50,5 +52,13 @@ Route::group([
             Route::put('/{taskId:[0-9]+}', 'TaskController@updateColumn');
             Route::delete('/{taskId:[0-9]+}', 'TaskController@delete');
         });
+    });
+    Route::group([
+        'prefix' => 'users'
+    ], function () {
+        Route::get('/deletable', 'UserController@allDeletable');
+        Route::post('/', 'UserController@create');
+        Route::put('/', 'RequestPasswordController@sendResetLinkEmailForAuthenticatedUser');
+        Route::delete('/{userId:[0-9]+}', 'UserController@delete');
     });
 });

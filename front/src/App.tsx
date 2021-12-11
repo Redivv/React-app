@@ -15,8 +15,11 @@ const App: React.FC = () => {
   const authContext = useContext(AuthContext);
   const availableRoutes = authContext.accessToken ? (
     <Switch>
-      <Route path="/main">
+      <Route path="/main" exact>
         <Main />
+      </Route>
+      <Route path="/reset" exact>
+        <ResetPassword />
       </Route>
       <Redirect to="/main" />
     </Switch>

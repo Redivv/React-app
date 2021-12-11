@@ -1,15 +1,44 @@
 import { Accordion, Form, Button, Spinner } from "react-bootstrap";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import classes from "./UsersModalSection.module.css";
+import User from "../../../../../../../types/user";
+import UserRequestService from "../../../../../../../services/UserRequestService";
+import AuthContext from "../../../../../../../store/auth-context";
 
 const UsersModalDelete = () => {
-  const [isProcessing, setIsProcessing] = useState(false);
+  const authContext = useContext(AuthContext);
+  const [isProcessing, setIsProcessing] = useState(true);
   const [deleteIsEnabled, setDeleteIsEnabled] = useState(false);
+  const [deletableUsers, setDeletableUsers] = useState<User[] | [] | null>(
+    null
+  );
   const selectedUserInput = useRef<HTMLSelectElement>(null);
 
   const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
+    if (selectedUserInput.current?.value === "") {
+      alert("Please select a valid user");
+      return;
+    }
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
     setIsProcessing(true);
+    UserRequestService.deleteUserById(
+      authContext.accessToken!,
+      selectedUserInput.current?.value!
+    ).then(() => {
+      let deletableUsersHelper = deletableUsers;
+      deletableUsersHelper!.splice(
+        deletableUsersHelper!.findIndex(
+          (item) => item.id == selectedUserInput.current?.value
+        ),
+        1
+      );
+      setDeletableUsers([...deletableUsersHelper!]);
+      alert("User deleted");
+      setIsProcessing(false);
+    });
   };
 
   const userSelectHandler = () => {
@@ -20,9 +49,23 @@ const UsersModalDelete = () => {
     setDeleteIsEnabled(true);
   };
 
+  const getDeletableUsers = () => {
+    if (deletableUsers !== null) {
+      return;
+    }
+    UserRequestService.getAllDeletableUsersRequest(
+      authContext.accessToken!
+    ).then((response) => {
+      setDeletableUsers(response.data);
+      setIsProcessing(false);
+    });
+  };
+
   return (
     <Accordion.Item eventKey="delete">
-      <Accordion.Header>Delete User</Accordion.Header>
+      <Accordion.Header onClick={getDeletableUsers}>
+        Delete User
+      </Accordion.Header>
       <Accordion.Body>
         <Spinner
           className={isProcessing ? "" : "d-none"}
@@ -36,10 +79,13 @@ const UsersModalDelete = () => {
           <Form.Group controlId="emailInput">
             <Form.Label>Users List</Form.Label>
             <Form.Select ref={selectedUserInput} onChange={userSelectHandler}>
-              <option value="">Choose a user from the list</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option value="">List of deletable users:</option>
+              {deletableUsers &&
+                deletableUsers.map((user, index) => (
+                  <option key={index} value={user.id}>
+                    {user.email}
+                  </option>
+                ))}
             </Form.Select>
           </Form.Group>
           <Button

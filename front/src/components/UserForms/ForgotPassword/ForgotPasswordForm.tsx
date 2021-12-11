@@ -1,6 +1,7 @@
 import React, { Fragment, useRef, useState } from "react";
 import { Form, Button, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import UserRequestService from "../../../services/UserRequestService";
 import classes from "../UserForm.module.css";
 
 const ForgotPasswordForm = () => {
@@ -9,7 +10,17 @@ const ForgotPasswordForm = () => {
 
   const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
+    if (forgotPasswordMailInput.current?.value === "") {
+      alert("Fill in the email field");
+      return;
+    }
     setIsProcessing(true);
+    UserRequestService.requestPasswordResetRequest(
+      forgotPasswordMailInput.current?.value!
+    ).then(() => {
+      alert("An email with further instructions has been sent.");
+      setIsProcessing(false);
+    });
   };
 
   return (

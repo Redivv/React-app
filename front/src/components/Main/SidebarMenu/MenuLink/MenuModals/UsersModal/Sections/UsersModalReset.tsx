@@ -1,11 +1,20 @@
 import { Accordion, Button, Spinner } from "react-bootstrap";
 import classes from "./UsersModalSection.module.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import UserRequestService from "../../../../../../../services/UserRequestService";
+import AuthContext from "../../../../../../../store/auth-context";
 
 const UsersModalReset = () => {
-  const [isProcessing, setisProcessing] = useState(false);
+  const authContext = useContext(AuthContext);
+  const [isProcessing, setIsProcessing] = useState(false);
   const buttonClickHandle = () => {
-    setisProcessing(true);
+    setIsProcessing(true);
+    UserRequestService.requestPasswordResetRequestWhileLoggedIn(
+      authContext.accessToken!
+    ).then(() => {
+      alert("An email with further instructions has been sent.");
+      setIsProcessing(false);
+    });
   };
 
   return (

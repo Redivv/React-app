@@ -7,10 +7,9 @@ const ResetPassword: React.FC = () => {
   const params = useQuery();
   const history = useHistory();
 
-  if (!params.get("resetToken")) {
+  if (!params.get("token") || !params.get("email")) {
     history.replace("/login");
   }
-
   return (
     <div className="container vh-100">
       <div className="row h-inherit justify-content-center align-items-center">
