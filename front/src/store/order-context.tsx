@@ -8,15 +8,45 @@ const OrderContext = createContext<OrderContextData>({
   displayedOrders: [],
   areOrdersLoaded: false,
   isActionBeingProcessed: false,
+  getAllCurrentOrders: () => {},
+  searchOrders: () => {},
   addNewOrder: () => {},
   editOrder: () => {},
   deleteOrderById: () => {},
+  setOrdersAreBeingLoaded: () => {},
 });
 export const OrderContextProvider: React.FC = (props) => {
   const [displayedOrders, setDisplayedOrders] = useState<Order[] | []>([]);
   const [areOrdersLoaded, setAreOrdersLoaded] = useState(false);
   const [isActionBeingProcessed, setIsActionBeingProcessed] = useState(false);
   const authContext = useContext(AuthContext);
+
+  const getAllCurrentOrders = () => {
+    OrderRequestService.getAllCurrentOrders(authContext.accessToken!)
+      .then((response) => {
+        setDisplayedOrders([...response.data!]);
+        setAreOrdersLoaded(true);
+      })
+      .catch((error) => {
+        alert("kek");
+      });
+  };
+
+  const searchOrders = (searchString: string) => {
+    if (searchString === "") {
+      setAreOrdersLoaded(true);
+      return;
+    }
+    OrderRequestService.searchOrders(authContext.accessToken!, searchString)
+      .then((response) => {
+        console.log(response.data);
+        setDisplayedOrders([...response.data!]);
+        setAreOrdersLoaded(true);
+      })
+      .catch((error) => {
+        alert("kek");
+      });
+  };
 
   const addNewOrder = async (orderObject: Order) => {
     setIsActionBeingProcessed(true);
@@ -77,24 +107,24 @@ export const OrderContextProvider: React.FC = (props) => {
     // TODO: handle error - rollback delete
   };
 
+  const setOrdersAreBeingLoaded = () => {
+    setAreOrdersLoaded(false);
+  };
+
   useEffect(() => {
-    OrderRequestService.getAllCurrentOrders(authContext.accessToken!)
-      .then((response) => {
-        setDisplayedOrders([...response.data!]);
-        setAreOrdersLoaded(true);
-      })
-      .catch((error) => {
-        alert("kek");
-      });
+    getAllCurrentOrders();
   }, []);
 
   const contextValues = {
     displayedOrders: displayedOrders,
     areOrdersLoaded: areOrdersLoaded,
     isActionBeingProcessed: isActionBeingProcessed,
+    getAllCurrentOrders: getAllCurrentOrders,
+    searchOrders: searchOrders,
     addNewOrder: addNewOrder,
     editOrder: editOrder,
     deleteOrderById: deleteOrderById,
+    setOrdersAreBeingLoaded: setOrdersAreBeingLoaded,
   };
 
   return (

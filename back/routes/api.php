@@ -40,6 +40,7 @@ Route::group([
         'prefix' => 'orders'
     ], function () {
         Route::get('/', 'OrderController@all');
+        Route::get('/search', 'OrderController@search');
         Route::post('/', 'OrderController@create');
         Route::put('/', 'OrderController@update');
         Route::delete('/{orderId:[0-9]+}', 'OrderController@delete');

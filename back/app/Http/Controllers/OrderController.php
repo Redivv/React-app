@@ -13,6 +13,18 @@ class OrderController extends Controller
         return response()->json(Order::all());
     }
 
+    public function search(Request $request)
+    {
+        $this->validate($request, [
+            "search" => ["required", "string"]
+        ]);
+        return response()->json(
+            Order::where('title', 'like', "%" . $request->search . "%")
+                ->orWhere('client', 'like', "%" . $request->search . "%")
+                ->get()
+        );
+    }
+
     public function create(Request $request)
     {
         $this->validate($request, [

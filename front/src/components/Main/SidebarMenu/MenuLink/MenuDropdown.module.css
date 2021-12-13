@@ -1,0 +1,19 @@
+.menuDropdown {
+    background-color: #3d3d3d;
+    border: 2px solid #1f1f1f;
+    padding: 2%;
+    color: rgb(199, 199, 199);
+    width: 80%;
+}
+
+.menuDropdown button, .menuDropdown button:focus {
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: rgb(0, 172, 230);
+    border: none;
+}
+
+.menuDropdown button:hover {
+    background-color: rgb(0, 145, 194);
+    border: none;
+}

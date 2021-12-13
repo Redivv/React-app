@@ -1,4 +1,4 @@
-.menuLink, .menuLink:focus {
+.menuLink, .menuLink.active, .menuLink:focus, .menuLink>button {
     display: block;
     width: 100%;
     padding: 3% 2%;
@@ -7,9 +7,11 @@
     color: rgb(199, 199, 199);
     box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
     margin: 0;
+    background-color: transparent;
+    border-color: transparent;
 }
 
-.menuLink:last-of-type{
+.menuLink:last-of-type {
     border-top: 1px solid #292929;
 }
 
@@ -19,6 +21,6 @@
     border-color: rgb(0, 172, 230);
 }
 
-.menuLink > span{
+.menuLink>span {
     padding-left: .5rem;
 }

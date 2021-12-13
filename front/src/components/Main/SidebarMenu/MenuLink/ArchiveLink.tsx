@@ -1,22 +1,22 @@
 import React from "react";
 import { useState } from "react";
-import MenuLink from "./MenuLink";
-import ArchiveModal from "./MenuModals/ArchiveModal";
+import { Button } from "react-bootstrap";
+import classes from "./MenuLink.module.css";
 
 const ArchiveLink = () => {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setShow(false);
+  const [isActive, setIsActive] = useState(false);
+  const handleActivate = () => {
+    setIsActive((prevState) => !prevState);
   };
-  const handleShow = () => setShow(true);
   return (
     <React.Fragment>
-      <MenuLink onClick={handleShow} isLinkActive={show}>
+      <Button
+        className={(isActive ? classes.active : "") + " " + classes.menuLink}
+        onClick={handleActivate}
+      >
         <i className="fas fa-file-alt"></i>
         <span>Archive</span>
-      </MenuLink>
-      <ArchiveModal show={show} handleClose={handleClose} />
+      </Button>
     </React.Fragment>
   );
 };
