@@ -3,6 +3,10 @@
     cursor: move;
 }
 
+.task.archived {
+    cursor: default;
+}
+
 .task:first-of-type {
     margin-top: 1.5rem;
 }
@@ -16,12 +20,12 @@
     box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 
-.task>header>span {
+.task:not(.archived)>header>span {
     cursor: pointer;
     padding: 0.5rem;
 }
 
-.task>header>span:hover {
+.task:not(.archived)>header>span:hover {
     text-decoration: underline;
 }
 

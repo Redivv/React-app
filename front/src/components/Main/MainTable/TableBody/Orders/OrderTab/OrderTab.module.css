@@ -26,7 +26,22 @@
     color: green;
     margin-left: auto;
     font-size: 1.2rem;
-    margin-right: 3%;
+}
+
+.archiveOrderButton {
+    padding: 1% 2%;
+    cursor: pointer;
+    color: purple;
+    font-size: 1.2rem;
+    margin: 0 1.5%;
+}
+
+.unArchiveOrderButton {
+    padding: 1% 2%;
+    cursor: pointer;
+    color: greenyellow;
+    margin-left: auto;
+    font-size: 1.2rem;
 }
 
 .deleteOrderButton {
@@ -38,6 +53,14 @@
 
 .editOrderButton:hover>i {
     color: rgb(1, 98, 1);
+}
+
+.archiveOrderButton:hover>i {
+    color: rgb(87, 0, 87);
+}
+
+.unArchiveOrderButton:hover>i {
+    color: rgb(138, 204, 39);
 }
 
 .deleteOrderButton:hover>i {

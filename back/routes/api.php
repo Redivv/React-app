@@ -44,6 +44,8 @@ Route::group([
         Route::post('/', 'OrderController@create');
         Route::put('/', 'OrderController@update');
         Route::delete('/{orderId:[0-9]+}', 'OrderController@delete');
+        Route::put('/{orderId:[0-9]+}', 'OrderController@archive');
+        Route::patch('/{orderId:[0-9]+}', 'OrderController@unArchive');
         Route::group([
             'prefix' => '{orderId:[0-9]+}/tasks'
         ], function () {

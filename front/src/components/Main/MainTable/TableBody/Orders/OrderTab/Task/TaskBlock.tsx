@@ -7,6 +7,7 @@ const TaskBlock: React.FC<{
   task: Task;
   ordinalNumber: number;
   parentId: string;
+  parentArchivedAt: string | null;
   handleEditTask: (taskObject: Task, ordinalNumber: number) => void;
   handleDeleteTask: (
     taskId: string,
@@ -37,7 +38,24 @@ const TaskBlock: React.FC<{
     event.dataTransfer.setData("taskNumber", String(props.ordinalNumber));
     event.dataTransfer.setData("taskParentId", props.parentId);
   };
-  return (
+
+  const taskCode = props.parentArchivedAt ? (
+    <div className={classes.task + " " + classes.archived}>
+      <header>
+        <span>{props.task.title}</span>
+      </header>
+      <main>
+        <div>
+          <i className="fas fa-user"></i>
+          <span>Random User</span>
+        </div>
+        <div>
+          <i className="fas fa-paperclip"></i>
+          <span>5</span>
+        </div>
+      </main>
+    </div>
+  ) : (
     <Fragment>
       <div
         draggable="true"
@@ -51,10 +69,6 @@ const TaskBlock: React.FC<{
           <div>
             <i className="fas fa-user"></i>
             <span>Random User</span>
-          </div>
-          <div>
-            <i className="fas fa-comment"></i>
-            <span>420</span>
           </div>
           <div>
             <i className="fas fa-paperclip"></i>
@@ -75,6 +89,8 @@ const TaskBlock: React.FC<{
       />
     </Fragment>
   );
+
+  return taskCode;
 };
 
 export default TaskBlock;

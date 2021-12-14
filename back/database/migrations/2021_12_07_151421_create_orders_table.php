@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string("shipping_address");
             $table->date("shipping_deadline");
             $table->text("notes")->nullable()->default(null);
+            $table->timestamp("archived_at");
             $table->timestamps();
         });
     }

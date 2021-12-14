@@ -10,11 +10,18 @@ class OrderRequestService {
     );
   }
 
-  searchOrders(idToken: string, searchString: string) {
+  searchOrders(
+    idToken: string,
+    searchString: string | null,
+    archiveActive: boolean
+  ) {
+    let routeParameters =
+      `&archive=${+!!archiveActive}` +
+      (searchString ? `&search=${searchString}` : "");
     return axios.get<Order[] | null>(
       process.env
         .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", `/orders/search`)
-        .replace("<ID_TOKEN>", idToken + `&search=${searchString}`)
+        .replace("<ID_TOKEN>", idToken + routeParameters)
     );
   }
 
@@ -48,6 +55,22 @@ class OrderRequestService {
 
   deleteOrderById = (idToken: string, objectId: string) => {
     return axios.delete(
+      process.env
+        .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", `/orders/${objectId}`)
+        .replace("<ID_TOKEN>", idToken)
+    );
+  };
+
+  archiveOrderById = (idToken: string, objectId: string) => {
+    return axios.put(
+      process.env
+        .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", `/orders/${objectId}`)
+        .replace("<ID_TOKEN>", idToken)
+    );
+  };
+
+  unArchiveOrderById = (idToken: string, objectId: string) => {
+    return axios.patch(
       process.env
         .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", `/orders/${objectId}`)
         .replace("<ID_TOKEN>", idToken)

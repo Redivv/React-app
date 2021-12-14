@@ -1,11 +1,12 @@
 import { Dropdown, Form, Button } from "react-bootstrap";
 import classesLink from "./MenuLink.module.css";
 import classesDropdown from "./MenuDropdown.module.css";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import OrderContext from "../../../../store/order-context";
 import React from "react";
 
 const SearchLink = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [searchState, setSearchState] = useState<{
     searchString: string | null;
     typingTimeout: NodeJS.Timeout | null;
@@ -24,7 +25,7 @@ const SearchLink = () => {
     setSearchState({
       searchString: event.target.value,
       typingTimeout: setTimeout(function () {
-        orderContext.searchOrders(event.target.value);
+        orderContext.searchOrders(event.target.value, false, false);
         if (event.target.value !== "") {
           setIsSearching(true);
         }
@@ -32,16 +33,22 @@ const SearchLink = () => {
     });
   };
 
+  const focusDropdownInput = () => {
+    setTimeout(function () {
+      inputRef.current?.focus();
+    }, 50);
+  };
+
   const handleClearSearch = () => {
     orderContext.setOrdersAreBeingLoaded();
     setIsSearching(false);
     setTimeout(function () {
-      orderContext.getAllCurrentOrders();
+      orderContext.searchOrders(null, false, false);
     }, 1000);
   };
 
   return (
-    <Dropdown drop="end">
+    <Dropdown drop="end" onClick={focusDropdownInput}>
       <Dropdown.Toggle
         className={
           (isSearching ? classesLink.active : "") + " " + classesLink.menuLink
@@ -57,6 +64,7 @@ const SearchLink = () => {
             type="text"
             placeholder="Search by order title or client"
             onChange={handleSearchInput}
+            ref={inputRef}
           />
           <Button type="reset" onClick={handleClearSearch} variant="primary">
             Clear Search

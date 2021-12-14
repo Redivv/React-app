@@ -9,7 +9,7 @@ class ConvertEmptyStringToNull
     public function handle($request, Closure $next)
     {
         foreach ($request->input() as $key => $value) {
-            if (empty($value) && ($value !== 0)) {
+            if (empty($value) && ((int)$value !== 0)) {
                 $request->request->set($key, null);
             }
         }

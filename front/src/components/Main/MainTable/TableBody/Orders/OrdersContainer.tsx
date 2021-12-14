@@ -22,9 +22,15 @@ const OrdersContainer = () => {
           {displayedOrders.map((order, index) => (
             <OrderTab order={order} ordinalNumber={index} key={order.id} />
           ))}
-          <NewOrderButton />
+          {!orderContext.archiveActive && <NewOrderButton />}
         </Fragment>
-      ) : <Spinner animation="border" variant="primary" className="mx-auto mt-5 d-block" />}
+      ) : (
+        <Spinner
+          animation="border"
+          variant="primary"
+          className="mx-auto mt-5 d-block"
+        />
+      )}
     </Accordion>
   );
 };

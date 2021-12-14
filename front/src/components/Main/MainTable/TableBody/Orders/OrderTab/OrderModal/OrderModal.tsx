@@ -29,6 +29,7 @@ const OrderModal: React.FC<{
       shipping_address: addressInput.current?.value!,
       shipping_deadline: deadlineInput.current?.value!,
       notes: notesInput.current?.value!,
+      archived_at: null,
     };
     try {
       OrderValidationService.validateInsert(orderObject);

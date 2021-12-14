@@ -10,18 +10,28 @@ class OrderController extends Controller
 {
     public function all()
     {
-        return response()->json(Order::all());
+        return response()->json(Order::whereNull("archived_at")->get());
     }
 
     public function search(Request $request)
     {
         $this->validate($request, [
-            "search" => ["required", "string"]
+            "search" => ["nullable", "string"],
+            "archive" => ["present", "boolean"]
         ]);
+        $searchResults = Order::query();
+        if ($request->search) {
+            $searchResults =
+                $searchResults->where(function ($query) use ($request) {
+                    $query->where('title', 'like', "%" . $request->search . "%")
+                        ->orWhere('client', 'like', "%" . $request->search . "%");
+                });
+        }
+        $searchResults = ((bool)$request->archive ?
+            $searchResults->whereNotNull("archived_at") :
+            $searchResults->whereNull("archived_at"));
         return response()->json(
-            Order::where('title', 'like', "%" . $request->search . "%")
-                ->orWhere('client', 'like', "%" . $request->search . "%")
-                ->get()
+            $searchResults->get()
         );
     }
 
@@ -58,5 +68,17 @@ class OrderController extends Controller
     {
         Order::findOrFail($orderId)->delete();
         return response('Deleted');
+    }
+
+    public function archive(string $orderId)
+    {
+        Order::findOrFail($orderId)->archive();
+        return response('Archived');
+    }
+
+    public function unArchive(string $orderId)
+    {
+        Order::findOrFail($orderId)->unArchive();
+        return response('Archived');
     }
 }

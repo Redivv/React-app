@@ -32,6 +32,16 @@ const OrderTab: React.FC<{
     orderContext.deleteOrderById(props.ordinalNumber, props.order.id!);
   };
 
+  const handleArchiveOrder = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    orderContext.archiveOrderById(props.ordinalNumber, props.order.id!);
+  };
+
+  const handleUnArchiveOrder = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    orderContext.unArchiveOrderById(props.ordinalNumber, props.order.id!);
+  };
+
   const getAllTasks = () => {
     if (childTasks.length !== 0) {
       return;
@@ -132,16 +142,32 @@ const OrderTab: React.FC<{
         <Accordion.Header className={classes.orderTab} onClick={getAllTasks}>
           <span>{props.order.client} </span>-
           <span> {props.order.shipping_deadline}</span>
-          <span className={classes.editOrderButton} onClick={handleShow}>
-            <i className="fas fa-edit"></i>
-          </span>
-          <span
-            className={classes.deleteOrderButton}
-            onClick={handleDeleteOrder}
-          >
-            <i className="fas fa-trash-alt"></i>
-          </span>
-          {/* TODO: deadline to human date / remaining */}
+          {props.order.archived_at ? (
+            <span
+              className={classes.unArchiveOrderButton}
+              onClick={handleUnArchiveOrder}
+            >
+              <i className="fas fa-redo-alt"></i>
+            </span>
+          ) : (
+            <Fragment>
+              <span className={classes.editOrderButton} onClick={handleShow}>
+                <i className="fas fa-edit"></i>
+              </span>
+              <span
+                className={classes.archiveOrderButton}
+                onClick={handleArchiveOrder}
+              >
+                <i className="fas fa-file-alt"></i>
+              </span>
+              <span
+                className={classes.deleteOrderButton}
+                onClick={handleDeleteOrder}
+              >
+                <i className="fas fa-trash-alt"></i>
+              </span>
+            </Fragment>
+          )}
         </Accordion.Header>
         <Accordion.Body>
           {childTasks.length !== 0 ? (
@@ -160,12 +186,15 @@ const OrderTab: React.FC<{
                     key={task.id}
                     ordinalNumber={index}
                     parentId={props.order.id!}
+                    parentArchivedAt={props.order.archived_at}
                   />
                 ))}
-                <NewTaskButton
-                  handleNewTask={handleNewTask}
-                  parentId={props.order.id!}
-                />
+                {!props.order.archived_at && (
+                  <NewTaskButton
+                    handleNewTask={handleNewTask}
+                    parentId={props.order.id!}
+                  />
+                )}
               </div>
               <div
                 className={`col-3 ${classes.tableColumn}`}
@@ -181,6 +210,7 @@ const OrderTab: React.FC<{
                     key={task.id}
                     ordinalNumber={index}
                     parentId={props.order.id!}
+                    parentArchivedAt={props.order.archived_at}
                   />
                 ))}
               </div>
@@ -198,6 +228,7 @@ const OrderTab: React.FC<{
                     key={task.id}
                     ordinalNumber={index}
                     parentId={props.order.id!}
+                    parentArchivedAt={props.order.archived_at}
                   />
                 ))}
               </div>
@@ -215,6 +246,7 @@ const OrderTab: React.FC<{
                     key={task.id}
                     ordinalNumber={index}
                     parentId={props.order.id!}
+                    parentArchivedAt={props.order.archived_at}
                   />
                 ))}
               </div>

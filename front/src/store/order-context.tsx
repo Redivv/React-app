@@ -8,20 +8,29 @@ const OrderContext = createContext<OrderContextData>({
   displayedOrders: [],
   areOrdersLoaded: false,
   isActionBeingProcessed: false,
+  searchString: null,
+  archiveActive: false,
   getAllCurrentOrders: () => {},
   searchOrders: () => {},
+  getArchivedOrders: () => {},
   addNewOrder: () => {},
   editOrder: () => {},
   deleteOrderById: () => {},
+  archiveOrderById: () => {},
+  unArchiveOrderById: () => {},
   setOrdersAreBeingLoaded: () => {},
+  setArchiveIsInactive: () => {},
 });
 export const OrderContextProvider: React.FC = (props) => {
   const [displayedOrders, setDisplayedOrders] = useState<Order[] | []>([]);
   const [areOrdersLoaded, setAreOrdersLoaded] = useState(false);
   const [isActionBeingProcessed, setIsActionBeingProcessed] = useState(false);
+  const [searchString, setSearchString] = useState<string | null>(null);
+  const [archiveActive, setArchiveActive] = useState(false);
   const authContext = useContext(AuthContext);
 
   const getAllCurrentOrders = () => {
+    setSearchString(null);
     OrderRequestService.getAllCurrentOrders(authContext.accessToken!)
       .then((response) => {
         setDisplayedOrders([...response.data!]);
@@ -32,14 +41,43 @@ export const OrderContextProvider: React.FC = (props) => {
       });
   };
 
-  const searchOrders = (searchString: string) => {
-    if (searchString === "") {
+  const searchOrders = (
+    searchStringParam: string | null,
+    persistSearch: boolean,
+    overrideArchiveActive: boolean
+  ) => {
+    if (searchStringParam === "") {
       setAreOrdersLoaded(true);
+      setSearchString(null);
       return;
     }
-    OrderRequestService.searchOrders(authContext.accessToken!, searchString)
+    if (persistSearch) {
+      searchStringParam = searchString;
+    } else {
+      setSearchString(searchStringParam);
+    }
+    OrderRequestService.searchOrders(
+      authContext.accessToken!,
+      searchStringParam,
+      overrideArchiveActive ? false : archiveActive
+    )
       .then((response) => {
-        console.log(response.data);
+        setDisplayedOrders([...response.data!]);
+        setAreOrdersLoaded(true);
+      })
+      .catch((error) => {
+        alert("kek");
+      });
+  };
+
+  const getArchivedOrders = () => {
+    setArchiveActive(true);
+    OrderRequestService.searchOrders(
+      authContext.accessToken!,
+      searchString,
+      true
+    )
+      .then((response) => {
         setDisplayedOrders([...response.data!]);
         setAreOrdersLoaded(true);
       })
@@ -104,11 +142,40 @@ export const OrderContextProvider: React.FC = (props) => {
       authContext.accessToken!,
       objectId
     ).catch((error) => alert(error.response));
-    // TODO: handle error - rollback delete
+  };
+
+  const archiveOrderById = (ordinalNumber: number, objectId: string) => {
+    if (!window.confirm("Confirm archiving the order")) {
+      return;
+    }
+    let displayedOrdersClone = displayedOrders;
+    displayedOrdersClone.splice(ordinalNumber, 1);
+    setDisplayedOrders([...displayedOrdersClone]);
+    OrderRequestService.archiveOrderById(
+      authContext.accessToken!,
+      objectId
+    ).catch((error) => alert(error.response));
+  };
+
+  const unArchiveOrderById = (ordinalNumber: number, objectId: string) => {
+    if (!window.confirm("Confirm restoring the order")) {
+      return;
+    }
+    let displayedOrdersClone = displayedOrders;
+    displayedOrdersClone.splice(ordinalNumber, 1);
+    setDisplayedOrders([...displayedOrdersClone]);
+    OrderRequestService.unArchiveOrderById(
+      authContext.accessToken!,
+      objectId
+    ).catch((error) => alert(error.response));
   };
 
   const setOrdersAreBeingLoaded = () => {
     setAreOrdersLoaded(false);
+  };
+
+  const setArchiveIsInactive = () => {
+    setArchiveActive(false);
   };
 
   useEffect(() => {
@@ -119,12 +186,18 @@ export const OrderContextProvider: React.FC = (props) => {
     displayedOrders: displayedOrders,
     areOrdersLoaded: areOrdersLoaded,
     isActionBeingProcessed: isActionBeingProcessed,
+    searchString: searchString,
+    archiveActive: archiveActive,
     getAllCurrentOrders: getAllCurrentOrders,
     searchOrders: searchOrders,
+    getArchivedOrders: getArchivedOrders,
     addNewOrder: addNewOrder,
     editOrder: editOrder,
     deleteOrderById: deleteOrderById,
+    archiveOrderById: archiveOrderById,
+    unArchiveOrderById: unArchiveOrderById,
     setOrdersAreBeingLoaded: setOrdersAreBeingLoaded,
+    setArchiveIsInactive: setArchiveIsInactive,
   };
 
   return (
