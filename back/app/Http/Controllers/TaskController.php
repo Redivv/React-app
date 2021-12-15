@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Laravel\Lumen\Routing\Controller;
 
 class TaskController extends Controller
@@ -18,7 +19,9 @@ class TaskController extends Controller
     {
         $request->merge(["order_id" => $orderId]);
         $this->validate($request, [
-            'order_id' => ["exists:orders,id"],
+            'order_id' => ["integer", Rule::exists("orders", "id")->where(function ($query) {
+                return $query->whereNull("archived_at");
+            })],
             'title' => ["required", "string"],
             'column_number' => ["required", "integer", "min:0", "max:3"],
             'description' => ["string", "nullable"],
@@ -36,7 +39,9 @@ class TaskController extends Controller
         $request->merge(["order_id" => $orderId]);
         $this->validate($request, [
             'id' => ["required", "numeric", "exists:tasks"],
-            'order_id' => ["exists:orders,id"],
+            'order_id' => ["integer", Rule::exists("orders", "id")->where(function ($query) {
+                return $query->whereNull("archived_at");
+            })],
             'title' => ["required", "string"],
             'column_number' => ["required", "integer", "min:0", "max:3"],
             'description' => ["string", "nullable"],
@@ -56,7 +61,9 @@ class TaskController extends Controller
         $request->merge(["order_id" => $orderId]);
         $this->validate($request, [
             'id' => ["required", "numeric", "exists:tasks"],
-            'order_id' => ["exists:orders,id"],
+            'order_id' => ["integer", Rule::exists("orders", "id")->where(function ($query) {
+                return $query->whereNull("archived_at");
+            })],
             'column_number' => ["required", "integer", "min:0", "max:3"],
         ]);
         $editedModel = Task::find($request->id);
@@ -66,9 +73,17 @@ class TaskController extends Controller
         return response('Updated');
     }
 
-    public function delete(string $orderId, string $taskId)
+    public function delete(Request $request, string $orderId, string $taskId)
     {
-        Task::findOrFail($taskId)->delete();
+        $request->merge(["id" => $taskId]);
+        $request->merge(["order_id" => $orderId]);
+        $this->validate($request, [
+            'id' => ["required", "numeric", "exists:tasks"],
+            'order_id' => ["integer", Rule::exists("orders", "id")->where(function ($query) {
+                return $query->whereNull("archived_at");
+            })],
+        ]);
+        Task::find($taskId)->delete();
         return response('Deleted');
     }
 }

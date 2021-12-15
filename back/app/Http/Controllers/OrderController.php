@@ -58,7 +58,7 @@ class OrderController extends Controller
             'shipping_deadline' => ["required", "date"],
             'notes' => ["string", "nullable"]
         ]);
-        $editedModel = Order::find($request->id);
+        $editedModel = Order::where('id', $request->id)->whereNull("archived_at")->first();
         $editedModel->fill($request->except("token"));
         $editedModel->save();
         return response('Updated');
@@ -66,19 +66,19 @@ class OrderController extends Controller
 
     public function delete(string $orderId)
     {
-        Order::findOrFail($orderId)->delete();
+        Order::where('id', $orderId)->whereNull("archived_at")->first()->delete();
         return response('Deleted');
     }
 
     public function archive(string $orderId)
     {
-        Order::findOrFail($orderId)->archive();
+        Order::where('id', $orderId)->whereNull("archived_at")->first()->archive();
         return response('Archived');
     }
 
     public function unArchive(string $orderId)
     {
-        Order::findOrFail($orderId)->unArchive();
+        Order::where('id', $orderId)->whereNotNull("archived_at")->first()->unArchive();
         return response('Archived');
     }
 }

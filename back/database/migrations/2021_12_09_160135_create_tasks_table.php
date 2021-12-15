@@ -24,7 +24,8 @@ class CreateTasksTable extends Migration
             $table->text('notes')->nullable()->default(null);
             $table->timestamps();
 
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')
+                ->onDelete('cascade');
         });
     }
 
