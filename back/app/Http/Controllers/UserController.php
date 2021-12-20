@@ -21,12 +21,12 @@ class UserController extends Controller
         $this->validate($request, [
             "email" => ["required", "email", "unique:users"]
         ]);
-        User::create([
+        $newUser = User::create([
             "email" => $request->email,
             "password" => Hash::make(str_random(12))
         ]);
         Mail::to($request->email)->send(new AccountCreated());
-        return response('Created', 201);
+        return response()->json($newUser, 201);
     }
 
     public function delete(string $userId)

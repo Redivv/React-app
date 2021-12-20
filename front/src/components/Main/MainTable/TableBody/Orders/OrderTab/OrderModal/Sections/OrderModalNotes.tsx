@@ -11,7 +11,7 @@ const OrderModalNotes: React.FC<{
 }> = (props) => {
   return (
     <Accordion.Item eventKey="notes">
-      <Accordion.Header>Notes & Comments</Accordion.Header>
+      <Accordion.Header>Notes</Accordion.Header>
       <Accordion.Body>
         <Form.Group className="mb-3" controlId="notesInput">
           <Form.Label>Notes</Form.Label>

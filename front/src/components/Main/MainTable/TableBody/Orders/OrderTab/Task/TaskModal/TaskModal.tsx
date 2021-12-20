@@ -6,6 +6,7 @@ import AuthContext from "../../../../../../../../store/auth-context";
 import Task from "../../../../../../../../types/task";
 import TaskModalBasic from "./Sections/TaskModalBasic";
 import TaskModalNotes from "./Sections/TaskModalNotes";
+import TaskModalUser from "./Sections/TaskModalUser";
 import TaskModalValidation from "./Sections/TaskModalValidation";
 
 const TaskModal: React.FC<{
@@ -18,6 +19,7 @@ const TaskModal: React.FC<{
   parentId: string;
 }> = (props) => {
   const titleInput = useRef<HTMLInputElement>(null);
+  const userInput = useRef<HTMLSelectElement>(null);
   const descriptionInput = useRef<HTMLTextAreaElement>(null);
   const validationTermsInput = useRef<HTMLTextAreaElement>(null);
   const validationCommentsInput = useRef<HTMLTextAreaElement>(null);
@@ -30,6 +32,7 @@ const TaskModal: React.FC<{
     const taskColumnNumber = props.task ? props.task.column_number : 0;
     const taskObject: Task = {
       title: titleInput.current?.value!,
+      user_id: null,
       description: descriptionInput.current?.value!,
       validation_terms: validationTermsInput.current?.value!,
       validation_comments: validationCommentsInput.current?.value!,
@@ -108,6 +111,15 @@ const TaskModal: React.FC<{
               values={{
                 title: props.task?.title,
                 description: props.task?.description,
+              }}
+            />
+            <TaskModalUser
+              refs={{
+                user: userInput,
+              }}
+              values={{
+                userId: props.task?.user_id,
+                userName: props.task?.user_name,
               }}
             />
             <TaskModalValidation

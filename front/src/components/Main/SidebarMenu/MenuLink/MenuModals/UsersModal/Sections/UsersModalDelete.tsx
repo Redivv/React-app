@@ -2,11 +2,10 @@ import { Accordion, Form, Button, Spinner } from "react-bootstrap";
 import { useRef, useState, useContext } from "react";
 import classes from "./UsersModalSection.module.css";
 import User from "../../../../../../../types/user";
-import UserRequestService from "../../../../../../../services/UserRequestService";
-import AuthContext from "../../../../../../../store/auth-context";
+import UserContext from "../../../../../../../store/user-context";
 
 const UsersModalDelete = () => {
-  const authContext = useContext(AuthContext);
+  const userContext = useContext(UserContext);
   const [isProcessing, setIsProcessing] = useState(true);
   const [deleteIsEnabled, setDeleteIsEnabled] = useState(false);
   const [deletableUsers, setDeletableUsers] = useState<User[] | [] | null>(
@@ -14,7 +13,7 @@ const UsersModalDelete = () => {
   );
   const selectedUserInput = useRef<HTMLSelectElement>(null);
 
-  const formSubmitHandler = (event: React.FormEvent) => {
+  const formSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     if (selectedUserInput.current?.value === "") {
       alert("Please select a valid user");
@@ -24,21 +23,8 @@ const UsersModalDelete = () => {
       return;
     }
     setIsProcessing(true);
-    UserRequestService.deleteUserById(
-      authContext.accessToken!,
-      selectedUserInput.current?.value!
-    ).then(() => {
-      let deletableUsersHelper = deletableUsers;
-      deletableUsersHelper!.splice(
-        deletableUsersHelper!.findIndex(
-          (item) => item.id == selectedUserInput.current?.value
-        ),
-        1
-      );
-      setDeletableUsers([...deletableUsersHelper!]);
-      alert("User deleted");
-      setIsProcessing(false);
-    });
+    await userContext.deleteUserById(selectedUserInput.current?.value!);
+    setIsProcessing(false);
   };
 
   const userSelectHandler = () => {
@@ -49,16 +35,13 @@ const UsersModalDelete = () => {
     setDeleteIsEnabled(true);
   };
 
-  const getDeletableUsers = () => {
-    if (deletableUsers !== null) {
-      return;
+  const getDeletableUsers = async () => {
+    if (userContext.deletableUsers !== null) {
+      setDeletableUsers(userContext.deletableUsers);
+    } else {
+      setDeletableUsers(await userContext.fetchDeletableUsers());
     }
-    UserRequestService.getAllDeletableUsersRequest(
-      authContext.accessToken!
-    ).then((response) => {
-      setDeletableUsers(response.data);
-      setIsProcessing(false);
-    });
+    setIsProcessing(false);
   };
 
   return (

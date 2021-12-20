@@ -1,29 +1,23 @@
 import { Accordion, Form, Button, Spinner } from "react-bootstrap";
 import { useRef, useState, useContext } from "react";
 import classes from "./UsersModalSection.module.css";
-import UserRequestService from "../../../../../../../services/UserRequestService";
-import AuthContext from "../../../../../../../store/auth-context";
+import UserContext from "../../../../../../../store/user-context";
 
 const UsersModalAdd = () => {
-  const authContext = useContext(AuthContext);
+  const userContext = useContext(UserContext);
   const [isProcessing, setIsProcessing] = useState(false);
   const newUserEmailInput = useRef<HTMLInputElement>(null);
 
-  const formSubmitHandler = (event: React.FormEvent) => {
+  const formSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     if (newUserEmailInput.current?.value === "") {
       alert("Input a new user's email");
       return;
     }
     setIsProcessing(true);
-    UserRequestService.addNewUserAccountRequest(
-      authContext.accessToken!,
-      newUserEmailInput.current?.value!
-    ).then(() => {
-      alert("Invitation email has been sent");
-      setIsProcessing(false);
-      newUserEmailInput.current!.value = "";
-    });
+    await userContext.addUserByEmail(newUserEmailInput.current!.value!);
+    setIsProcessing(false);
+    newUserEmailInput.current!.value = "";
   };
 
   return (

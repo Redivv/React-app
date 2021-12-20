@@ -11,7 +11,7 @@ class UserRequestService {
   }
 
   addNewUserAccountRequest(idToken: string, emailValue: string) {
-    return axios.post(
+    return axios.post<User>(
       process.env
         .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", "/users")
         .replace("<ID_TOKEN>", idToken),
