@@ -36,10 +36,10 @@ const UsersModalDelete = () => {
   };
 
   const getDeletableUsers = async () => {
-    if (userContext.deletableUsers !== null) {
-      setDeletableUsers(userContext.deletableUsers);
+    if (userContext.availableUsers !== null) {
+      setDeletableUsers(userContext.availableUsers);
     } else {
-      setDeletableUsers(await userContext.fetchDeletableUsers());
+      setDeletableUsers(await userContext.fetchAvailableUsers());
     }
     setIsProcessing(false);
   };
