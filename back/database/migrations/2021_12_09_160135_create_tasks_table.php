@@ -17,6 +17,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->integer('column_number')->default(0);
             $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('user_id')->nullable()->default(null);
             $table->string('title');
             $table->text('description')->nullable()->default(null);
             $table->text('validation_terms');
@@ -25,6 +26,8 @@ class CreateTasksTable extends Migration
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')
+                ->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
         });
     }

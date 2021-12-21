@@ -30,9 +30,11 @@ const TaskModal: React.FC<{
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const taskColumnNumber = props.task ? props.task.column_number : 0;
+    const assignedUserId =
+      userInput.current?.value === "" ? null : +userInput.current?.value!;
     const taskObject: Task = {
       title: titleInput.current?.value!,
-      user_id: null,
+      user_id: assignedUserId,
       description: descriptionInput.current?.value!,
       validation_terms: validationTermsInput.current?.value!,
       validation_comments: validationCommentsInput.current?.value!,
@@ -53,8 +55,8 @@ const TaskModal: React.FC<{
         props.parentId,
         taskObject
       )
-        .then(() => {
-          props.handleEditTask!(taskObject, props.ordinalNumber!);
+        .then((response) => {
+          props.handleEditTask!(response.data, props.ordinalNumber!);
           alert("Task Changed");
           setIsProcessing(false);
           handleCloseModal();
@@ -71,8 +73,7 @@ const TaskModal: React.FC<{
         taskObject
       )
         .then((response) => {
-          taskObject["id"] = response.data.name;
-          props.handleNewTask!(taskObject);
+          props.handleNewTask!(response.data);
           alert("Task Saved");
           setIsProcessing(false);
           handleCloseModal();
@@ -119,7 +120,6 @@ const TaskModal: React.FC<{
               }}
               values={{
                 userId: props.task?.user_id,
-                userName: props.task?.user_name,
               }}
             />
             <TaskModalValidation

@@ -15,6 +15,10 @@ class UserController extends Controller
     {
         return response()->json(User::select(['id', 'email'])->whereNotIn('id', [auth()->user()->id])->get());
     }
+    public function allAssignable()
+    {
+        return response()->json(User::select(['id', 'email'])->get());
+    }
 
     public function create(Request $request)
     {

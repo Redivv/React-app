@@ -12,7 +12,7 @@ class Order extends Model
 
     public function tasks()
     {
-        return $this->hasMany(Task::class)->get();
+        return $this->hasMany(Task::class);
     }
 
     public function archive()

@@ -47,7 +47,9 @@ const TaskBlock: React.FC<{
       <main>
         <div>
           <i className="fas fa-user"></i>
-          <span>Random User</span>
+          <span>
+            {props.task.user ? props.task.user.email! : "No user assigned"}
+          </span>
         </div>
         <div>
           <i className="fas fa-paperclip"></i>
@@ -68,7 +70,9 @@ const TaskBlock: React.FC<{
         <main>
           <div>
             <i className="fas fa-user"></i>
-            <span>Random User</span>
+            <span>
+              {props.task.user ? props.task.user.email! : "No user assigned"}
+            </span>
           </div>
           <div>
             <i className="fas fa-paperclip"></i>

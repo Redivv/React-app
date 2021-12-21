@@ -1,4 +1,10 @@
-import React, { DragEvent, Fragment, useContext, useState } from "react";
+import React, {
+  DragEvent,
+  Fragment,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { Accordion, Spinner } from "react-bootstrap";
 import TaskRequestService from "../../../../../../services/TaskRequestService";
 import AuthContext from "../../../../../../store/auth-context";
@@ -136,6 +142,13 @@ const OrderTab: React.FC<{
     });
   };
 
+  useEffect(() => {
+    Array.from(
+      document.querySelectorAll<HTMLButtonElement>(
+        "h2[class^='OrderTab']>.accordion-button:not(.collapsed), div[class*=' OrderTab']>.accordion-button:not(.collapsed)"
+      )
+    ).forEach((node) => node.click());
+  }, []);
   return (
     <Fragment>
       <Accordion.Item eventKey={props.order.id!}>

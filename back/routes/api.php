@@ -60,6 +60,7 @@ Route::group([
         'prefix' => 'users'
     ], function () {
         Route::get('/deletable', 'UserController@allDeletable');
+        Route::get('/assignable', 'UserController@allAssignable');
         Route::post('/', 'UserController@create');
         Route::put('/', 'RequestPasswordController@sendResetLinkEmailForAuthenticatedUser');
         Route::delete('/{userId:[0-9]+}', 'UserController@delete');

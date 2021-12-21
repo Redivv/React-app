@@ -12,7 +12,14 @@ class TaskController extends Controller
 {
     public function all(string $orderId)
     {
-        return response()->json(Order::findOrFail($orderId)->tasks());
+        return response()->json(
+            Order::findOrFail($orderId)
+                ->tasks()
+                ->orderBy(
+                    "created_at",
+                    "desc"
+                )->get()
+        );
     }
 
     public function create(Request $request, string $orderId)
@@ -22,6 +29,7 @@ class TaskController extends Controller
             'order_id' => ["integer", Rule::exists("orders", "id")->where(function ($query) {
                 return $query->whereNull("archived_at");
             })],
+            'user_id' => ["integer", "nullable", "exists:users,id"],
             'title' => ["required", "string"],
             'column_number' => ["required", "integer", "min:0", "max:3"],
             'description' => ["string", "nullable"],
@@ -30,7 +38,8 @@ class TaskController extends Controller
             'notes' => ["string", "nullable"]
         ]);
         $newTask = Task::create($request->except("token"));
-        return response()->json(["name" => $newTask->id], 201);
+        $newTask->load("user:id,email");
+        return response()->json($newTask);
     }
 
 
@@ -52,7 +61,8 @@ class TaskController extends Controller
         $editedModel = Task::find($request->id);
         $editedModel->fill($request->except("token"));
         $editedModel->save();
-        return response('Updated');
+        $editedModel->load("user:id,email");
+        return response()->json($editedModel);
     }
 
     public function updateColumn(Request $request, string $orderId, string $taskId)

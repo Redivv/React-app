@@ -16,7 +16,7 @@ const OrdersContainer = () => {
     setIsLoaded(orderContext.areOrdersLoaded);
   }, [orderContext.displayedOrders, orderContext.areOrdersLoaded]);
   return (
-    <Accordion className={classes.ordersContainer}>
+    <Accordion className={classes.ordersContainer} defaultActiveKey="dupa">
       {isLoaded ? (
         <Fragment>
           {displayedOrders.map((order, index) => (

@@ -9,6 +9,13 @@ class UserRequestService {
         .replace("<ID_TOKEN>", idToken)
     );
   }
+  getAllTaskAssignableUsersRequest(idToken: string) {
+    return axios.get<User[] | []>(
+      process.env
+        .REACT_APP_DB_API_ROUTE!.replace("<DB_ROUTE>", "/users/assignable")
+        .replace("<ID_TOKEN>", idToken)
+    );
+  }
 
   addNewUserAccountRequest(idToken: string, emailValue: string) {
     return axios.post<User>(

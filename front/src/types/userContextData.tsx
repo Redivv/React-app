@@ -1,8 +1,10 @@
 import User from "./user";
 
 type UserContextData = {
-  availableUsers: User[] | [] | null;
-  fetchAvailableUsers: () => Promise<User[] | []>;
+  deletableUsers: User[] | [] | null;
+  taskAssignableUsers: User[] | [] | null;
+  fetchDeletableUsers: () => Promise<User[] | []>;
+  fetchTaskAssignableUsers: () => Promise<User[] | []>;
   addUserByEmail: (userEmail: string) => void;
   deleteUserById: (userId: string) => Promise<User[] | []>;
 };

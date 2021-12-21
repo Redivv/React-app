@@ -1,5 +1,6 @@
-import { RefObject, useState } from "react";
+import { RefObject, useState, useContext } from "react";
 import { Accordion, Form, Spinner } from "react-bootstrap";
+import UserContext from "../../../../../../../../../store/user-context";
 import User from "../../../../../../../../../types/user";
 
 const TaskModalUser: React.FC<{
@@ -8,15 +9,22 @@ const TaskModalUser: React.FC<{
   };
   values: {
     userId: number | undefined | null;
-    userName: string | undefined | null;
   };
 }> = (props) => {
+  const userContext = useContext(UserContext);
   const [isProcessing, setIsProcessing] = useState(true);
   const [availableUsers, setAvailableUsers] = useState<User[] | [] | null>(
     null
   );
 
-  const fetchAvailableUsers = () => {};
+  const fetchAvailableUsers = async () => {
+    if (userContext.taskAssignableUsers !== null) {
+      setAvailableUsers(userContext.taskAssignableUsers);
+    } else {
+      setAvailableUsers(await userContext.fetchTaskAssignableUsers());
+    }
+    setIsProcessing(false);
+  };
 
   return (
     <Accordion.Item eventKey="user">
@@ -33,10 +41,14 @@ const TaskModalUser: React.FC<{
           <Form.Group controlId="emailInput">
             <Form.Label>Users List</Form.Label>
             <Form.Select ref={props.refs.user}>
-              <option value="">List of available users:</option>
+              <option value="">No user assigned</option>
               {availableUsers &&
                 availableUsers.map((user, index) => (
-                  <option key={index} value={user.id}>
+                  <option
+                    key={index}
+                    value={user.id}
+                    selected={props.values.userId == +user.id}
+                  >
                     {user.email}
                   </option>
                 ))}

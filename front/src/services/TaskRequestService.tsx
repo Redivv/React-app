@@ -14,7 +14,7 @@ class TaskRequestService {
   }
 
   addNewTask(idToken: string, parentId: string, taskObject: Task) {
-    return axios.post<{ name: string }>(
+    return axios.post<Task>(
       process.env
         .REACT_APP_DB_API_ROUTE!.replace(
           "<DB_ROUTE>",
@@ -31,7 +31,7 @@ class TaskRequestService {
   }
 
   editTask(idToken: string, parentId: string, taskObject: Task) {
-    return axios.put(
+    return axios.put<Task>(
       process.env
         .REACT_APP_DB_API_ROUTE!.replace(
           "<DB_ROUTE>",
@@ -60,7 +60,7 @@ class TaskRequestService {
           `/orders/${parentId}/tasks/${taskId}`
         )
         .replace("<ID_TOKEN>", idToken),
-      { "column_number": columnNumber },
+      { column_number: columnNumber },
       {
         headers: {
           "Content-Type": "application/json",

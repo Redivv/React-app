@@ -3,19 +3,26 @@ import UserRequestService from "../services/UserRequestService";
 import User from "../types/user";
 import UserContextData from "../types/userContextData";
 import AuthContext from "./auth-context";
+import OrderContext from "./order-context";
 
 const UserContext = createContext<UserContextData>({
-  availableUsers: [],
-  fetchAvailableUsers: () => new Promise(() => []),
+  deletableUsers: [],
+  taskAssignableUsers: [],
+  fetchDeletableUsers: () => new Promise(() => []),
+  fetchTaskAssignableUsers: () => new Promise(() => []),
   addUserByEmail: () => {},
   deleteUserById: () => new Promise(() => []),
 });
 
 export const UserContextProvider: React.FC = (props) => {
   const authContext = useContext(AuthContext);
-  const [availableUsers, setAvailableUsers] = useState<User[] | [] | null>(
+  const orderContext = useContext(OrderContext);
+  const [deletableUsers, setDeletableUsers] = useState<User[] | [] | null>(
     null
   );
+  const [taskAssignableUsers, setTaskAssignableUsers] = useState<
+    User[] | [] | null
+  >(null);
 
   const addUserByEmail = async (userEmail: string) => {
     const response = await UserRequestService.addNewUserAccountRequest(
@@ -23,37 +30,58 @@ export const UserContextProvider: React.FC = (props) => {
       userEmail
     );
     alert("Invitation email has been sent");
-    if (!availableUsers) {
-      await fetchAvailableUsers();
-      return;
+    if (deletableUsers) {
+      setDeletableUsers([...deletableUsers, response.data]);
     }
-    setAvailableUsers([...availableUsers, response.data]);
+    if (taskAssignableUsers) {
+      setTaskAssignableUsers([...taskAssignableUsers, response.data]);
+    }
   };
 
-  const fetchAvailableUsers = async () => {
+  const fetchDeletableUsers = async () => {
     const response = await UserRequestService.getAllDeletableUsersRequest(
       authContext.accessToken!
     );
-    setAvailableUsers(response.data);
+    setDeletableUsers(response.data);
+    return response.data;
+  };
+
+  const fetchTaskAssignableUsers = async () => {
+    const response = await UserRequestService.getAllTaskAssignableUsersRequest(
+      authContext.accessToken!
+    );
+    setTaskAssignableUsers(response.data);
     return response.data;
   };
 
   const deleteUserById = async (userId: string) => {
     await UserRequestService.deleteUserById(authContext.accessToken!, userId);
-    let deletableUsersHelper = availableUsers!;
+    let deletableUsersHelper = deletableUsers!;
     deletableUsersHelper!.splice(
       deletableUsersHelper!.findIndex((item) => item.id == userId),
       1
     );
-    setAvailableUsers([...deletableUsersHelper!]);
+    setDeletableUsers([...deletableUsersHelper!]);
+    if (taskAssignableUsers) {
+      let taskAssignableUsersHelper = taskAssignableUsers;
+      taskAssignableUsersHelper!.splice(
+        taskAssignableUsersHelper!.findIndex((item) => item.id == userId),
+        1
+      );
+      setTaskAssignableUsers([...taskAssignableUsersHelper]);
+    }
+    orderContext.setOrdersAreBeingLoaded();
+    orderContext.searchOrders(null, true, false);
     alert("User deleted");
     return deletableUsersHelper;
   };
 
   const contextValues = {
-    availableUsers: availableUsers,
+    deletableUsers: deletableUsers,
+    taskAssignableUsers: taskAssignableUsers,
     addUserByEmail: addUserByEmail,
-    fetchAvailableUsers: fetchAvailableUsers,
+    fetchDeletableUsers: fetchDeletableUsers,
+    fetchTaskAssignableUsers: fetchTaskAssignableUsers,
     deleteUserById: deleteUserById,
   };
 
