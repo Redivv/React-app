@@ -36,9 +36,7 @@ export const OrderContextProvider: React.FC = (props) => {
         setDisplayedOrders([...response.data!]);
         setAreOrdersLoaded(true);
       })
-      .catch((error) => {
-        alert("kek");
-      });
+      .catch(() => alert("An error occured. Please try again later"));
   };
 
   const searchOrders = (
@@ -65,9 +63,7 @@ export const OrderContextProvider: React.FC = (props) => {
         setDisplayedOrders([...response.data!]);
         setAreOrdersLoaded(true);
       })
-      .catch((error) => {
-        alert("kek");
-      });
+      .catch(() => alert("An error occured. Please try again later"));
   };
 
   const getArchivedOrders = () => {
@@ -81,9 +77,7 @@ export const OrderContextProvider: React.FC = (props) => {
         setDisplayedOrders([...response.data!]);
         setAreOrdersLoaded(true);
       })
-      .catch((error) => {
-        alert("kek");
-      });
+      .catch(() => alert("An error occured. Please try again later"));
   };
 
   const addNewOrder = async (orderObject: Order) => {
@@ -99,10 +93,9 @@ export const OrderContextProvider: React.FC = (props) => {
         setDisplayedOrders([...displayedOrders, orderObject]);
         return true;
       })
-      .catch((error) => {
+      .catch(() => {
         setIsActionBeingProcessed(false);
-        alert("KURWA");
-        console.log(error.response.data);
+        alert("Invalid data");
         return false;
       });
     return response;
@@ -122,10 +115,9 @@ export const OrderContextProvider: React.FC = (props) => {
         setDisplayedOrders([...displayedOrdersClone]);
         return true;
       })
-      .catch((error) => {
-        alert("KURWA");
+      .catch(() => {
+        alert("Invalid data. Changes not saved");
         setIsActionBeingProcessed(false);
-        console.log(error.response.data);
         return false;
       });
     return response;
@@ -141,7 +133,7 @@ export const OrderContextProvider: React.FC = (props) => {
     OrderRequestService.deleteOrderById(
       authContext.accessToken!,
       objectId
-    ).catch((error) => alert(error.response));
+    ).catch(() => alert("Invalid data. Changes not saved"));
   };
 
   const archiveOrderById = (ordinalNumber: number, objectId: string) => {
@@ -154,7 +146,7 @@ export const OrderContextProvider: React.FC = (props) => {
     OrderRequestService.archiveOrderById(
       authContext.accessToken!,
       objectId
-    ).catch((error) => alert(error.response));
+    ).catch(() => alert("Invalid data. Changes not saved"));
   };
 
   const unArchiveOrderById = (ordinalNumber: number, objectId: string) => {
@@ -167,7 +159,7 @@ export const OrderContextProvider: React.FC = (props) => {
     OrderRequestService.unArchiveOrderById(
       authContext.accessToken!,
       objectId
-    ).catch((error) => alert(error.response));
+    ).catch(() => alert("Invalid data. Changes not saved"));
   };
 
   const setOrdersAreBeingLoaded = () => {

@@ -61,9 +61,8 @@ const TaskModal: React.FC<{
           setIsProcessing(false);
           handleCloseModal();
         })
-        .catch((error) => {
-          alert("KURWA");
-          console.log(error.response.data);
+        .catch(() => {
+          alert("Invalid data. Changes not saved");
           setIsProcessing(false);
         });
     } else {
@@ -79,8 +78,7 @@ const TaskModal: React.FC<{
           handleCloseModal();
         })
         .catch((error) => {
-          alert("KURWA");
-          console.log(error.response.data);
+          alert("Invalid data. Changes not saved");
           setIsProcessing(false);
         });
     }

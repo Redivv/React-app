@@ -102,10 +102,7 @@ const OrderTab: React.FC<{
       authContext.accessToken!,
       parentId,
       taskId
-    ).catch((error) => {
-      alert("KURWA");
-      console.log(error.response.data);
-    });
+    ).catch(() => alert("Invalid data. Changes not saved"));
   };
 
   const allowDrop = (event: DragEvent<HTMLDivElement>) => {
@@ -136,10 +133,7 @@ const OrderTab: React.FC<{
       taskParentId,
       draggedTask.id!,
       draggedTask.column_number
-    ).catch((error) => {
-      alert("KURWA");
-      console.log(error.response.data);
-    });
+    ).catch(() => alert("Invalid data. Changes not saved"));
   };
 
   useEffect(() => {
