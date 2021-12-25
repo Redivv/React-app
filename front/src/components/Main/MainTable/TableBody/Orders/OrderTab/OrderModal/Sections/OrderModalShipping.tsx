@@ -13,7 +13,7 @@ const OrderModalShipping: React.FC<{
 }> = (props) => {
   return (
     <Accordion.Item eventKey="shipping">
-      <Accordion.Header>Shipping</Accordion.Header>
+      <Accordion.Header>Shipping*</Accordion.Header>
       <Accordion.Body>
         <Form.Group className="mb-3" controlId="shippingPlaceInput">
           <Form.Label className="fw-bold">Shipping Address*</Form.Label>

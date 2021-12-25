@@ -6,6 +6,7 @@ import OrderModalShipping from "./Sections/OrderModalShipping";
 import OrderContext from "../../../../../../../store/order-context";
 import OrderValidationService from "../../../../../../../services/OrderValidationService";
 import Order from "../../../../../../../types/order";
+import Attachment from "../../../../../../../types/attachment";
 
 const OrderModal: React.FC<{
   show: boolean;
@@ -13,6 +14,9 @@ const OrderModal: React.FC<{
   order?: Order;
   ordinalNumber?: number;
 }> = (props) => {
+  const [orderAttachments, setOrderAttachments] = useState<null | Attachment[]>(
+    props.order ? props.order.files : null
+  );
   const titleInput = useRef<HTMLInputElement>(null);
   const clientInput = useRef<HTMLInputElement>(null);
   const addressInput = useRef<HTMLInputElement>(null);
@@ -30,6 +34,7 @@ const OrderModal: React.FC<{
       shipping_deadline: deadlineInput.current?.value!,
       notes: notesInput.current?.value!,
       archived_at: null,
+      files: orderAttachments,
     };
     try {
       OrderValidationService.validateInsert(orderObject);
@@ -57,6 +62,24 @@ const OrderModal: React.FC<{
   const handleCloseModal = () => {
     props.handleClose();
   };
+
+  const handleFileAdded = (attachments: Attachment[]) => {
+    if (!orderAttachments) {
+      setOrderAttachments(attachments);
+      return;
+    }
+    let mergedArrays = orderAttachments.concat(attachments);
+    mergedArrays = mergedArrays.filter(
+      (value, index, self) =>
+        index ===
+        self.findIndex(
+          (t) =>
+            t.id === value.id && t.original_filename === value.original_filename
+        )
+    );
+    setOrderAttachments(mergedArrays);
+  };
+  const handleFileDeleted = (attachmentId: number) => {};
 
   return (
     <Modal show={props.show} onHide={handleCloseModal}>
@@ -91,6 +114,10 @@ const OrderModal: React.FC<{
               }}
             />
             <OrderModalNotes
+              fileEvents={{
+                onFileAdded: handleFileAdded,
+                onFileDeleted: handleFileDeleted,
+              }}
               refs={{ notes: notesInput }}
               values={{ notes: props.order?.notes }}
             />

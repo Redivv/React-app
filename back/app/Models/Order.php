@@ -9,10 +9,16 @@ class Order extends Model
 {
     protected $fillable = ['title', 'client', 'shipping_address', 'shipping_deadline', 'notes'];
     protected $hidden = [];
+    protected $with = ['files:id,original_filename'];
 
     public function tasks()
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function files()
+    {
+        return $this->belongsToMany(File::class);
     }
 
     public function archive()

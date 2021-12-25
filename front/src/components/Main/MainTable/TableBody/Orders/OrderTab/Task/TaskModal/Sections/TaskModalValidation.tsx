@@ -13,7 +13,7 @@ const TaskModalValidation: React.FC<{
 }> = (props) => {
   return (
     <Accordion.Item eventKey="validation">
-      <Accordion.Header>Validation</Accordion.Header>
+      <Accordion.Header>Validation*</Accordion.Header>
       <Accordion.Body>
         <Form.Group className="mb-3" controlId="termsInput">
           <Form.Label className="fw-bold">Validation Terms*</Form.Label>

@@ -65,4 +65,9 @@ Route::group([
         Route::put('/', 'RequestPasswordController@sendResetLinkEmailForAuthenticatedUser');
         Route::delete('/{userId:[0-9]+}', 'UserController@delete');
     });
+    Route::group([
+        'prefix' => 'files'
+    ], function () {
+        Route::post('/', 'FilesController@upload');
+    });
 });

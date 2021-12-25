@@ -42,9 +42,12 @@ class OrderController extends Controller
             'client' => ["required", "string"],
             'shipping_address' => ["required", "string"],
             'shipping_deadline' => ["required", "date"],
-            'notes' => ["string", "nullable"]
+            'notes' => ["present", "string", "nullable"],
+            'files' => ["present", "nullable", "array"],
+            'files.*.id' => ["numeric", "exists:files,id"]
         ]);
-        $newOrder = Order::create($request->except("token"));
+        $newOrder = Order::create($request->except(["token", "files"]));
+        $newOrder->files()->sync(array_column($request->get("files"), "id"));
         return response()->json(["name" => $newOrder->id], 201);
     }
 
@@ -56,11 +59,14 @@ class OrderController extends Controller
             'client' => ["required", "string"],
             'shipping_address' => ["required", "string"],
             'shipping_deadline' => ["required", "date"],
-            'notes' => ["string", "nullable"]
+            'notes' => ["present", "string", "nullable"],
+            'files' => ["present", "nullable", "array"],
+            "files.*.id" => ["numeric", "exists:files,id"]
         ]);
         $editedModel = Order::where('id', $request->id)->whereNull("archived_at")->first();
-        $editedModel->fill($request->except("token"));
+        $editedModel->fill($request->except(["token", "files"]));
         $editedModel->save();
+        $editedModel->files()->sync(array_column($request->get("files"), "id"));
         return response('Updated');
     }
 

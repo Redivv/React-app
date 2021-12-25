@@ -13,7 +13,7 @@ const OrderModalBasic: React.FC<{
 }> = (props) => {
   return (
     <Accordion.Item eventKey="basic">
-      <Accordion.Header>Basic</Accordion.Header>
+      <Accordion.Header>Basic*</Accordion.Header>
       <Accordion.Body>
         <Form.Group className="mb-3" controlId="titleInput">
           <Form.Label className="fw-bold">Order Title*</Form.Label>
