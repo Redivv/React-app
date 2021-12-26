@@ -69,17 +69,23 @@ const OrderModal: React.FC<{
       return;
     }
     let mergedArrays = orderAttachments.concat(attachments);
-    mergedArrays = mergedArrays.filter(
-      (value, index, self) =>
-        index ===
-        self.findIndex(
-          (t) =>
-            t.id === value.id && t.original_filename === value.original_filename
-        )
-    );
+    mergedArrays = mergedArrays.filter((value, index, self) => {
+      if (index === self.findIndex((t) => t.id === value.id)) {
+        return true;
+      }
+      alert(
+        "Duplicate file. File with contents of " +
+          value.original_filename +
+          " already attached"
+      );
+    });
     setOrderAttachments(mergedArrays);
   };
-  const handleFileDeleted = (attachmentId: number) => {};
+  const handleFileDeleted = (attachmentOrdinalNumber: number) => {
+    let orderAttachmentsHelper = orderAttachments;
+    orderAttachmentsHelper!.splice(attachmentOrdinalNumber, 1);
+    setOrderAttachments([...orderAttachmentsHelper!]);
+  };
 
   return (
     <Modal show={props.show} onHide={handleCloseModal}>
@@ -119,7 +125,7 @@ const OrderModal: React.FC<{
                 onFileDeleted: handleFileDeleted,
               }}
               refs={{ notes: notesInput }}
-              values={{ notes: props.order?.notes }}
+              values={{ notes: props.order?.notes, files: orderAttachments }}
             />
           </Accordion>
         </Modal.Body>

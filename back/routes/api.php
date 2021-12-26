@@ -68,6 +68,7 @@ Route::group([
     Route::group([
         'prefix' => 'files'
     ], function () {
+        Route::get('/{fileId:[0-9]+}', 'FilesController@download');
         Route::post('/', 'FilesController@upload');
     });
 });

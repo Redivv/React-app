@@ -2,6 +2,7 @@ import { DragEvent, Fragment, useState } from "react";
 import Task from "../../../../../../../types/task";
 import classes from "./TaskBlock.module.css";
 import TaskModal from "./TaskModal/TaskModal";
+import TaskModalArchived from "./TaskModalArchived/TaskModalArchived";
 
 const TaskBlock: React.FC<{
   task: Task;
@@ -40,23 +41,30 @@ const TaskBlock: React.FC<{
   };
 
   const taskCode = props.parentArchivedAt ? (
-    <div className={classes.task + " " + classes.archived}>
-      <header>
-        <span>{props.task.title}</span>
-      </header>
-      <main>
-        <div>
-          <i className="fas fa-user"></i>
-          <span>
-            {props.task.user ? props.task.user.email! : "No user assigned"}
-          </span>
-        </div>
-        <div>
-          <i className="fas fa-paperclip"></i>
-          <span>5</span>
-        </div>
-      </main>
-    </div>
+    <Fragment>
+      <div className={classes.task}>
+        <header>
+          <span onClick={handleShow}>{props.task.title}</span>
+        </header>
+        <main>
+          <div>
+            <i className="fas fa-user"></i>
+            <span>
+              {props.task.user ? props.task.user.email! : "No user assigned"}
+            </span>
+          </div>
+          <div>
+            <i className="fas fa-paperclip"></i>
+            <span>{props.task.files ? props.task.files.length : "0"}</span>
+          </div>
+        </main>
+      </div>
+      <TaskModalArchived
+        task={props.task}
+        show={show}
+        handleClose={handleClose}
+      />
+    </Fragment>
   ) : (
     <Fragment>
       <div
@@ -76,7 +84,7 @@ const TaskBlock: React.FC<{
           </div>
           <div>
             <i className="fas fa-paperclip"></i>
-            <span>5</span>
+            <span>{props.task.files ? props.task.files.length : "0"}</span>
           </div>
           <div className={classes.actionRow}>
             <i className="fas fa-trash-alt" onClick={handleDeleteTask}></i>

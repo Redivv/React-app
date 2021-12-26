@@ -24,8 +24,18 @@
     padding: 1% 2%;
     cursor: pointer;
     color: green;
+    font-size: 1.2rem;
+}
+
+.attachmentsIndicator{
+    padding: 1% 2%;
+    color: darkblue;
     margin-left: auto;
     font-size: 1.2rem;
+}
+
+.attachmentsIndicator>span{
+    padding-right: 0.3rem;
 }
 
 .archiveOrderButton {
@@ -33,14 +43,12 @@
     cursor: pointer;
     color: purple;
     font-size: 1.2rem;
-    margin: 0 1.5%;
 }
 
 .unArchiveOrderButton {
     padding: 1% 2%;
     cursor: pointer;
     color: greenyellow;
-    margin-left: auto;
     font-size: 1.2rem;
 }
 

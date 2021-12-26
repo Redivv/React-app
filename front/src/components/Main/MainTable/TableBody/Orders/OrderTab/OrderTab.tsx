@@ -15,6 +15,7 @@ import classes from "./OrderTab.module.css";
 import NewTaskButton from "./Task/NewTaskButton";
 import TaskBlock from "./Task/TaskBlock";
 import Task from "../../../../../../types/task";
+import OrderModalArchived from "./OrderModalArchived/OrderModalArchived";
 
 const OrderTab: React.FC<{
   order: Order;
@@ -150,14 +151,31 @@ const OrderTab: React.FC<{
           <span>{props.order.client} </span>-
           <span> {props.order.shipping_deadline}</span>
           {props.order.archived_at ? (
-            <span
-              className={classes.unArchiveOrderButton}
-              onClick={handleUnArchiveOrder}
-            >
-              <i className="fas fa-redo-alt"></i>
-            </span>
+            <Fragment>
+              <span className={classes.attachmentsIndicator}>
+                <span>
+                  {props.order.files ? props.order.files.length : "0"}
+                </span>
+                <i className="fas fa-paperclip"></i>
+              </span>
+              <span className={classes.editOrderButton} onClick={handleShow}>
+                <i className="fas fa-eye"></i>
+              </span>
+              <span
+                className={classes.unArchiveOrderButton}
+                onClick={handleUnArchiveOrder}
+              >
+                <i className="fas fa-redo-alt"></i>
+              </span>
+            </Fragment>
           ) : (
             <Fragment>
+              <span className={classes.attachmentsIndicator}>
+                <span>
+                  {props.order.files ? props.order.files.length : "0"}
+                </span>
+                <i className="fas fa-paperclip"></i>
+              </span>
               <span className={classes.editOrderButton} onClick={handleShow}>
                 <i className="fas fa-edit"></i>
               </span>
@@ -267,12 +285,20 @@ const OrderTab: React.FC<{
           )}
         </Accordion.Body>
       </Accordion.Item>
-      <OrderModal
-        show={show}
-        handleClose={handleClose}
-        order={props.order}
-        ordinalNumber={props.ordinalNumber}
-      />
+      {props.order.archived_at ? (
+        <OrderModalArchived
+          show={show}
+          handleClose={handleClose}
+          order={props.order}
+        />
+      ) : (
+        <OrderModal
+          show={show}
+          handleClose={handleClose}
+          order={props.order}
+          ordinalNumber={props.ordinalNumber}
+        />
+      )}
     </Fragment>
   );
 };

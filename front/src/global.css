@@ -11,3 +11,7 @@ body {
 .ml-auto {
     margin-left: auto !important;
 }
+
+input:disabled, textarea:disabled, select:disabled{
+    opacity: 0.7 !important;
+}

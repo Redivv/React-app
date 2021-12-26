@@ -3,10 +3,6 @@
     cursor: move;
 }
 
-.task.archived {
-    cursor: default;
-}
-
 .task:first-of-type {
     margin-top: 1.5rem;
 }

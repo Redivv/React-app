@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller;
 
 class FilesController extends Controller
 {
+    public function download(string $fileId)
+    {
+        $searchedFile = File::findOrFail($fileId);
+        return Storage::download("attachments/" . $searchedFile->filename);
+    }
+
     public function upload(Request $request)
     {
         $this->validate($request, [

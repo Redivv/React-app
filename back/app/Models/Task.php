@@ -10,11 +10,16 @@ class Task extends Model
         "title", "column_number", "order_id", "user_id", "description", "validation_comments", "validation_terms", "notes"
     ];
     protected $hidden = [];
-    protected $with = ['user:id,email'];
+    protected $with = ['user:id,email', 'files:id,original_filename'];
 
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function files()
+    {
+        return $this->belongsToMany(File::class);
     }
 
     public function user()

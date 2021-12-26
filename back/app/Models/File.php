@@ -13,4 +13,9 @@ class File extends Model
     {
         return $this->belongsToMany(Order::class);
     }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class);
+    }
 }

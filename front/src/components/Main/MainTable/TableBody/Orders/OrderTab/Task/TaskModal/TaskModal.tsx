@@ -3,6 +3,7 @@ import { Modal, Button, Form, Accordion, Spinner } from "react-bootstrap";
 import TaskRequestService from "../../../../../../../../services/TaskRequestService";
 import TaskValidationService from "../../../../../../../../services/TaskValidationService";
 import AuthContext from "../../../../../../../../store/auth-context";
+import Attachment from "../../../../../../../../types/attachment";
 import Task from "../../../../../../../../types/task";
 import TaskModalBasic from "./Sections/TaskModalBasic";
 import TaskModalNotes from "./Sections/TaskModalNotes";
@@ -18,6 +19,9 @@ const TaskModal: React.FC<{
   ordinalNumber?: number;
   parentId: string;
 }> = (props) => {
+  const [taskAttachments, setTaskAttachments] = useState<null | Attachment[]>(
+    props.task ? props.task.files : null
+  );
   const titleInput = useRef<HTMLInputElement>(null);
   const userInput = useRef<HTMLSelectElement>(null);
   const descriptionInput = useRef<HTMLTextAreaElement>(null);
@@ -40,6 +44,7 @@ const TaskModal: React.FC<{
       validation_comments: validationCommentsInput.current?.value!,
       notes: notesInput.current?.value!,
       column_number: taskColumnNumber,
+      files: taskAttachments,
     };
     try {
       TaskValidationService.validateInsert(taskObject);
@@ -56,6 +61,7 @@ const TaskModal: React.FC<{
         taskObject
       )
         .then((response) => {
+          console.log(response.data);
           props.handleEditTask!(response.data, props.ordinalNumber!);
           alert("Task Changed");
           setIsProcessing(false);
@@ -86,6 +92,30 @@ const TaskModal: React.FC<{
 
   const handleCloseModal = () => {
     props.handleClose();
+  };
+
+  const handleFileAdded = (attachments: Attachment[]) => {
+    if (!taskAttachments) {
+      setTaskAttachments(attachments);
+      return;
+    }
+    let mergedArrays = taskAttachments.concat(attachments);
+    mergedArrays = mergedArrays.filter((value, index, self) => {
+      if (index === self.findIndex((t) => t.id === value.id)) {
+        return true;
+      }
+      alert(
+        "Duplicate file. File with contents of " +
+          value.original_filename +
+          " already attached"
+      );
+    });
+    setTaskAttachments(mergedArrays);
+  };
+  const handleFileDeleted = (attachmentOrdinalNumber: number) => {
+    let orderAttachmentsHelper = taskAttachments;
+    orderAttachmentsHelper!.splice(attachmentOrdinalNumber, 1);
+    setTaskAttachments([...orderAttachmentsHelper!]);
   };
 
   return (
@@ -131,8 +161,12 @@ const TaskModal: React.FC<{
               }}
             />
             <TaskModalNotes
+              fileEvents={{
+                onFileAdded: handleFileAdded,
+                onFileDeleted: handleFileDeleted,
+              }}
               refs={{ notes: notesInput }}
-              values={{ notes: props.task?.notes }}
+              values={{ notes: props.task?.notes, files: taskAttachments }}
             />
           </Accordion>
         </Modal.Body>

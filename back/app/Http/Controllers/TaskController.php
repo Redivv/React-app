@@ -35,10 +35,14 @@ class TaskController extends Controller
             'description' => ["string", "nullable"],
             'validation_terms' => ["required", "string"],
             'validation_terms' => ["string", "nullable"],
-            'notes' => ["string", "nullable"]
+            'notes' => ["string", "nullable"],
+            'files' => ["present", "nullable", "array"],
+            'files.*.id' => ["numeric", "exists:files,id"]
         ]);
-        $newTask = Task::create($request->except("token"));
+        $newTask = Task::create($request->except(["token", "files"]));
         $newTask->load("user:id,email");
+        $newTask->files()->sync(array_column($request->get("files"), "id"));
+        $newTask->load("files:id,original_filename");
         return response()->json($newTask);
     }
 
@@ -56,12 +60,16 @@ class TaskController extends Controller
             'description' => ["string", "nullable"],
             'validation_terms' => ["required", "string"],
             'validation_terms' => ["string", "nullable"],
-            'notes' => ["string", "nullable"]
+            'notes' => ["string", "nullable"],
+            'files' => ["present", "nullable", "array"],
+            'files.*.id' => ["numeric", "exists:files,id"]
         ]);
         $editedModel = Task::find($request->id);
-        $editedModel->fill($request->except("token"));
+        $editedModel->fill($request->except(["token", "files"]));
         $editedModel->save();
         $editedModel->load("user:id,email");
+        $editedModel->files()->sync(array_column($request->get("files"), "id"));
+        $editedModel->load("files:id,original_filename");
         return response()->json($editedModel);
     }
 

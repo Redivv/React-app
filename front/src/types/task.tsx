@@ -1,3 +1,5 @@
+import Attachment from "./attachment";
+
 type Task = {
   id?: string;
   user_id: number | null;
@@ -8,6 +10,7 @@ type Task = {
   notes: string;
   column_number: number;
   user?: { id: number; email: string } | null;
+  files: null | Attachment[];
 };
 
 export default Task;
