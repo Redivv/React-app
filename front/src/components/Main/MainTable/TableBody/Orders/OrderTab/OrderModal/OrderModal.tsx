@@ -78,6 +78,7 @@ const OrderModal: React.FC<{
           value.original_filename +
           " already attached"
       );
+      return false;
     });
     setOrderAttachments(mergedArrays);
   };

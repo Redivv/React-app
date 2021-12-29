@@ -21,6 +21,11 @@
     border-color: rgb(0, 172, 230);
 }
 
-.menuLink>span {
+.menuLink>span:not(.badge) {
     padding-left: .5rem;
+}
+
+.menuLink>span.badge {
+    background-color: rgb(0, 172, 230) !important;
+    margin-right: 3%;
 }

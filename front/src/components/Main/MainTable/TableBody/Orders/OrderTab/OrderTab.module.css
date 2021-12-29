@@ -7,6 +7,14 @@
     border-radius: 10px;
 }
 
+.orderTab>button>span {
+    padding: 0 1rem
+}
+
+.orderTab>button>span:first-of-type {
+    padding-left: 1rem;
+}
+
 .tableColumn {
     padding: 1% 2%;
     text-align: center;
@@ -27,14 +35,14 @@
     font-size: 1.2rem;
 }
 
-.attachmentsIndicator{
+.attachmentsIndicator {
     padding: 1% 2%;
     color: darkblue;
     margin-left: auto;
     font-size: 1.2rem;
 }
 
-.attachmentsIndicator>span{
+.attachmentsIndicator>span {
     padding-right: 0.3rem;
 }
 

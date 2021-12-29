@@ -63,4 +63,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany(Task::class)->get();
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

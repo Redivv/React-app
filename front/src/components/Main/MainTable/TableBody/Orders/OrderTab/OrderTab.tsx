@@ -148,8 +148,8 @@ const OrderTab: React.FC<{
     <Fragment>
       <Accordion.Item eventKey={props.order.id!}>
         <Accordion.Header className={classes.orderTab} onClick={getAllTasks}>
-          <span>{props.order.client} </span>-
-          <span> {props.order.shipping_deadline}</span>
+          <span>{props.order.client}</span>
+          <span>{props.order.shipping_deadline}</span>
           {props.order.archived_at ? (
             <Fragment>
               <span className={classes.attachmentsIndicator}>

@@ -71,4 +71,13 @@ Route::group([
         Route::get('/{fileId:[0-9]+}', 'FilesController@download');
         Route::post('/', 'FilesController@upload');
     });
+
+
+    Route::group([
+        'prefix' => 'notifications'
+    ], function () {
+        Route::get('/', 'NotificationController@getAll');
+        Route::delete('/', 'NotificationController@clearAll');
+        Route::delete('/{notificationId:[0-9]+}', 'NotificationController@delete');
+    });
 });

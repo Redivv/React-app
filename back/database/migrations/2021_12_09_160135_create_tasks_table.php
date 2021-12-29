@@ -28,7 +28,7 @@ class CreateTasksTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')
                 ->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
         });
     }
 

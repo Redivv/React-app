@@ -1,0 +1,2 @@
+* * * * * root /usr/local/bin/php /var/www/html/artisan queue:work --stop-when-empty
+# Empty Line

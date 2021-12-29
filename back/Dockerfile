@@ -2,7 +2,7 @@ FROM php:8.1-apache
 WORKDIR /var/www/html
 
 RUN apt update
-RUN apt install -y zip unzip libonig-dev \
+RUN apt install -y zip unzip libonig-dev cron vim rsyslog \
 && docker-php-ext-install pdo \
 && docker-php-ext-install pdo_mysql \
 && docker-php-ext-install mbstring \
@@ -22,3 +22,8 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN a2enmod rewrite
 RUN chown -R www-data * && chmod -R 775 *
+
+COPY ./docker/oms-cron /etc/cron.d
+COPY ./docker/startup.sh /
+
+CMD ["sh", "/startup.sh"]

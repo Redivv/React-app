@@ -109,6 +109,7 @@ const TaskModal: React.FC<{
           value.original_filename +
           " already attached"
       );
+      return false;
     });
     setTaskAttachments(mergedArrays);
   };

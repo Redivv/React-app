@@ -1,4 +1,3 @@
-import { RefObject } from "react";
 import { Accordion, Form } from "react-bootstrap";
 
 const TaskModalArchivedValidation: React.FC<{

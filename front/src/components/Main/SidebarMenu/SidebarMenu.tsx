@@ -1,4 +1,5 @@
 import React from "react";
+import { NotificationContextProvider } from "../../../store/notification-context";
 import ArchiveLink from "./MenuLink/ArchiveLink";
 import LogoutLink from "./MenuLink/LogoutLink";
 import NotificationsLink from "./MenuLink/NotificationsLink";
@@ -11,11 +12,13 @@ const SidebarMenu: React.FC<{ className: string }> = (props) => {
     <aside
       className={`${props.className} ${classes.sidebarMenu} position-relative`}
     >
-      <NotificationsLink />
-      <UsersLink />
-      <SearchLink />
-      <ArchiveLink />
-      <LogoutLink />
+      <NotificationContextProvider>
+        <NotificationsLink />
+        <UsersLink />
+        <SearchLink />
+        <ArchiveLink />
+        <LogoutLink />
+      </NotificationContextProvider>
     </aside>
   );
 };
