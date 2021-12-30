@@ -88,7 +88,12 @@ class OrderController extends Controller
 
     public function archive(string $orderId)
     {
-        Order::where('id', $orderId)->whereNull("archived_at")->first()->archive();
+        $requestedOrder = Order::where('id', $orderId)->whereNull("archived_at")->first();
+        $requestedOrder->archive();
+        NotificationService::sendNotificationToAllUsers([
+            "content" => "An order has been archived - " . $requestedOrder->client . " " . $requestedOrder->shipping_deadline,
+            "order_id" => $orderId
+        ]);
         return response('Archived');
     }
 

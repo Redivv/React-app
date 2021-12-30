@@ -7,7 +7,7 @@ type OrderContextData = {
   searchString: string | null;
   archiveActive: boolean;
   getAllCurrentOrders: () => void;
-  searchOrders: (searchString: string | null, persistSearch: boolean, overrideArchiveActive: boolean) => void;
+  searchOrders: (searchString: string | null, persistSearch: boolean, overrideArchiveActive: boolean | null) => void;
   getArchivedOrders: () => void;
   addNewOrder: (orderObject: Order) => Promise<boolean> | void;
   editOrder: (

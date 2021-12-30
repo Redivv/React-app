@@ -12,9 +12,15 @@ class Notification extends Model
     protected $casts = [
         'created_at' => "datetime:Y-m-d",
     ];
+    protected $with = ['order:id,archived_at'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }

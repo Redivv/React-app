@@ -24,7 +24,7 @@ const SearchLink = () => {
     setSearchState({
       searchString: event.target.value,
       typingTimeout: setTimeout(function () {
-        orderContext.searchOrders(event.target.value, false, false);
+        orderContext.searchOrders(event.target.value, false, null);
       }, 1000),
     });
   };
@@ -38,7 +38,7 @@ const SearchLink = () => {
   const handleClearSearch = () => {
     orderContext.setOrdersAreBeingLoaded();
     setTimeout(function () {
-      orderContext.searchOrders(null, false, false);
+      orderContext.searchOrders(null, false, null);
     }, 1000);
   };
 

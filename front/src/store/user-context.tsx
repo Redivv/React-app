@@ -71,7 +71,7 @@ export const UserContextProvider: React.FC = (props) => {
       setTaskAssignableUsers([...taskAssignableUsersHelper]);
     }
     orderContext.setOrdersAreBeingLoaded();
-    orderContext.searchOrders(null, true, false);
+    orderContext.searchOrders(null, true, null);
     alert("User deleted");
     return deletableUsersHelper;
   };

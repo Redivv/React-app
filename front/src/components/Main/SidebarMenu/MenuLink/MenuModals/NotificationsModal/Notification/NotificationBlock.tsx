@@ -21,7 +21,7 @@ const NotificationBlock: React.FC<{
     orderContext.searchOrders(
       String(props.notification.order_id),
       false,
-      false
+      !!props.notification.order.archived_at
     );
     props.hideModal();
   };

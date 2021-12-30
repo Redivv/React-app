@@ -42,7 +42,7 @@ export const OrderContextProvider: React.FC = (props) => {
   const searchOrders = (
     searchStringParam: string | null,
     persistSearch: boolean,
-    overrideArchiveActive: boolean
+    overrideArchiveActive: boolean | null
   ) => {
     if (searchStringParam === "") {
       setAreOrdersLoaded(true);
@@ -54,10 +54,15 @@ export const OrderContextProvider: React.FC = (props) => {
     } else {
       setSearchString(searchStringParam);
     }
+    let archiveFlag = archiveActive;
+    if (overrideArchiveActive !== null) {
+      archiveFlag = overrideArchiveActive;
+      setArchiveActive(archiveFlag);
+    }
     OrderRequestService.searchOrders(
       authContext.accessToken!,
       searchStringParam,
-      overrideArchiveActive ? false : archiveActive
+      archiveFlag
     )
       .then((response) => {
         setDisplayedOrders([...response.data!]);

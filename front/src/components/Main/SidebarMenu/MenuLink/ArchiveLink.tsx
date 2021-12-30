@@ -1,18 +1,14 @@
 import React, { useContext } from "react";
-import { useState } from "react";
 import { Button } from "react-bootstrap";
 import OrderContext from "../../../../store/order-context";
 import classes from "./MenuLink.module.css";
 
 const ArchiveLink = () => {
-  const [isActive, setIsActive] = useState(false);
   const orderContext = useContext(OrderContext);
   const handleActivate = () => {
-    setIsActive((prevState) => !prevState);
     orderContext.setOrdersAreBeingLoaded();
-    if (isActive) {
-      orderContext.setArchiveIsInactive();
-      orderContext.searchOrders(null, true, true);
+    if (orderContext.archiveActive) {
+      orderContext.searchOrders(null, true, false);
       return;
     }
     orderContext.getArchivedOrders();
@@ -20,7 +16,11 @@ const ArchiveLink = () => {
   return (
     <React.Fragment>
       <Button
-        className={(isActive ? classes.active : "") + " " + classes.menuLink}
+        className={
+          (orderContext.archiveActive ? classes.active : "") +
+          " " +
+          classes.menuLink
+        }
         onClick={handleActivate}
       >
         <i className="fas fa-file-alt"></i>
