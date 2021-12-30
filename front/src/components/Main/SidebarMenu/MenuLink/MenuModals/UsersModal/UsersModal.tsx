@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Fragment, useContext } from "react";
 import { Modal, Accordion } from "react-bootstrap";
+import AuthContext from "../../../../../../store/auth-context";
 import UsersModalAdd from "./Sections/UsersModalAdd";
 import UsersModalDelete from "./Sections/UsersModalDelete";
 import UsersModalReset from "./Sections/UsersModalReset";
@@ -7,6 +8,7 @@ import UsersModalReset from "./Sections/UsersModalReset";
 const UsersModal: React.FC<{ show: boolean; handleClose: () => void }> = (
   props
 ) => {
+  const authContext = useContext(AuthContext);
   return (
     <Modal show={props.show} onHide={props.handleClose}>
       <Modal.Header closeButton>
@@ -14,8 +16,12 @@ const UsersModal: React.FC<{ show: boolean; handleClose: () => void }> = (
       </Modal.Header>
       <Modal.Body>
         <Accordion>
-          <UsersModalAdd />
-          <UsersModalDelete />
+          {authContext.isAdmin === 1 && (
+            <Fragment>
+              <UsersModalAdd />
+              <UsersModalDelete />
+            </Fragment>
+          )}
           <UsersModalReset />
         </Accordion>
       </Modal.Body>

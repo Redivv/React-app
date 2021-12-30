@@ -5,6 +5,7 @@ import AuthContextData from "../types/authContextData";
 
 const AuthContext = createContext<AuthContextData>({
   accessToken: null,
+  isAdmin: null,
   isLoggedIn: false,
   login: () => {},
   logout: () => {},
@@ -14,8 +15,15 @@ const retriveStoredTokenData = (): string | null => {
   return localStorage.getItem("userToken");
 };
 
+const retriveStoredRoleData = (): number | null => {
+  return localStorage.getItem("userIsAdmin")
+    ? +localStorage.getItem("userIsAdmin")!
+    : null;
+};
+
 export const AuthContextProvider: React.FC = (props) => {
   const [accessToken, setToken] = useState(retriveStoredTokenData());
+  const [isAdmin, setIsAdmin] = useState(retriveStoredRoleData());
 
   if (accessToken) {
     axios.interceptors.response.use(
@@ -27,7 +35,7 @@ export const AuthContextProvider: React.FC = (props) => {
           const response = await TokenRequestService.tokenRefreshRequest(
             accessToken
           );
-          loginHandler(response.data.access_token);
+          loginHandler(response.data.access_token, response.data.isAdmin);
           let errorUrl = new URL(originalConfig.url);
           errorUrl.searchParams.set("token", response.data.access_token);
           originalConfig["url"] = errorUrl.toString();
@@ -47,19 +55,24 @@ export const AuthContextProvider: React.FC = (props) => {
     );
   }
 
-  const loginHandler = (accessToken: string) => {
+  const loginHandler = (accessToken: string, isAdmin: number = 0) => {
     setToken(accessToken);
+    setIsAdmin(isAdmin);
     localStorage.setItem("userToken", accessToken);
+    localStorage.setItem("userIsAdmin", String(isAdmin));
   };
 
   const logoutHandler = () => {
     setToken(null);
+    setIsAdmin(null);
     localStorage.removeItem("userToken");
+    localStorage.removeItem("userIsAdmin");
     axios.interceptors.response.eject(0);
   };
 
   const contextValues = {
     accessToken: accessToken,
+    isAdmin: isAdmin,
     isLoggedIn: !!accessToken,
     login: loginHandler,
     logout: logoutHandler,

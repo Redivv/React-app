@@ -29,9 +29,6 @@ Route::group([
         Route::post('logout', 'AuthController@logout');
     });
 });
-Route::get('/', function () {
-    phpinfo();
-});
 
 Route::group([
     'middleware' => 'jwt',
@@ -41,11 +38,15 @@ Route::group([
     ], function () {
         Route::get('/', 'OrderController@all');
         Route::get('/search', 'OrderController@search');
-        Route::post('/', 'OrderController@create');
-        Route::put('/', 'OrderController@update');
-        Route::delete('/{orderId:[0-9]+}', 'OrderController@delete');
-        Route::put('/{orderId:[0-9]+}', 'OrderController@archive');
-        Route::patch('/{orderId:[0-9]+}', 'OrderController@unArchive');
+        Route::group([
+            'middleware' => 'admin',
+        ], function () {
+            Route::post('/', 'OrderController@create');
+            Route::put('/', 'OrderController@update');
+            Route::delete('/{orderId:[0-9]+}', 'OrderController@delete');
+            Route::put('/{orderId:[0-9]+}', 'OrderController@archive');
+            Route::patch('/{orderId:[0-9]+}', 'OrderController@unArchive');
+        });
         Route::group([
             'prefix' => '{orderId:[0-9]+}/tasks'
         ], function () {
@@ -59,11 +60,15 @@ Route::group([
     Route::group([
         'prefix' => 'users'
     ], function () {
-        Route::get('/deletable', 'UserController@allDeletable');
         Route::get('/assignable', 'UserController@allAssignable');
-        Route::post('/', 'UserController@create');
         Route::put('/', 'RequestPasswordController@sendResetLinkEmailForAuthenticatedUser');
-        Route::delete('/{userId:[0-9]+}', 'UserController@delete');
+        Route::group([
+            'middleware' => 'admin',
+        ], function () {
+            Route::get('/deletable', 'UserController@allDeletable');
+            Route::post('/', 'UserController@create');
+            Route::delete('/{userId:[0-9]+}', 'UserController@delete');
+        });
     });
     Route::group([
         'prefix' => 'files'
@@ -71,8 +76,6 @@ Route::group([
         Route::get('/{fileId:[0-9]+}', 'FilesController@download');
         Route::post('/', 'FilesController@upload');
     });
-
-
     Route::group([
         'prefix' => 'notifications'
     ], function () {

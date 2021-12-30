@@ -66,6 +66,7 @@ class AuthController extends Controller
 
         return response()->json([
             'access_token' => $token,
+            'isAdmin' => auth()->user()->is_admin
         ]);
     }
 }

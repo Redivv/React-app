@@ -5,9 +5,11 @@ import NewOrderButton from "./OrderTab/NewOrderButton";
 import { useEffect, useContext, useState, Fragment } from "react";
 import Order from "../../../../../types/order";
 import OrderContext from "../../../../../store/order-context";
+import AuthContext from "../../../../../store/auth-context";
 
 const OrdersContainer = () => {
   const orderContext = useContext(OrderContext);
+  const authContext = useContext(AuthContext);
   const [displayedOrders, setDisplayedOrders] = useState<Order[] | []>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -22,7 +24,9 @@ const OrdersContainer = () => {
           {displayedOrders.map((order, index) => (
             <OrderTab order={order} ordinalNumber={index} key={order.id} />
           ))}
-          {!orderContext.archiveActive && <NewOrderButton />}
+          {(!orderContext.archiveActive && authContext.isAdmin === 1) && (
+            <NewOrderButton />
+          )}
         </Fragment>
       ) : (
         <Spinner

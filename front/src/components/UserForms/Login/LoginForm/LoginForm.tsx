@@ -17,7 +17,7 @@ const LoginForm = () => {
         loginMailInput.current.value,
         loginPasswordInput.current.value
       ).then((response) => {
-        authContext.login(response.data.access_token);
+        authContext.login(response.data.access_token, response.data.isAdmin);
       });
     }
   };
@@ -41,7 +41,9 @@ const LoginForm = () => {
           ref={loginPasswordInput}
         />
       </Form.Group>
-      <Link className="d-block mb-3" to="/forgot">Forgot Password?</Link>
+      <Link className="d-block mb-3" to="/forgot">
+        Forgot Password?
+      </Link>
       <Button type="submit" className="btn">
         Login
       </Button>

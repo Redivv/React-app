@@ -1,7 +1,8 @@
 type AuthContextData = {
   accessToken: string | null;
+  isAdmin: number | null;
   isLoggedIn: boolean;
-  login: (accessToken: string) => void;
+  login: (accessToken: string, isAdmin: number) => void;
   logout: () => void;
 };
 

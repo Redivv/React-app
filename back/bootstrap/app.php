@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\ConvertEmptyStringToNull;
 use App\Http\Middleware\CorsMiddleware;
-use PHPUnit\TextUI\XmlConfiguration\ConvertLogTypes;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -88,6 +87,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'jwt' => App\Http\Middleware\Authenticate::class,
+    'admin' => App\Http\Middleware\Admin::class
 ]);
 
 /*

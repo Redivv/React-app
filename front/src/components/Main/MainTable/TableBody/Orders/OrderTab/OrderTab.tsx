@@ -150,7 +150,7 @@ const OrderTab: React.FC<{
         <Accordion.Header className={classes.orderTab} onClick={getAllTasks}>
           <span>{props.order.client}</span>
           <span>{props.order.shipping_deadline}</span>
-          {props.order.archived_at ? (
+          {props.order.archived_at || authContext.isAdmin === 0 ? (
             <Fragment>
               <span className={classes.attachmentsIndicator}>
                 <span>
@@ -161,12 +161,14 @@ const OrderTab: React.FC<{
               <span className={classes.editOrderButton} onClick={handleShow}>
                 <i className="fas fa-eye"></i>
               </span>
-              <span
-                className={classes.unArchiveOrderButton}
-                onClick={handleUnArchiveOrder}
-              >
-                <i className="fas fa-redo-alt"></i>
-              </span>
+              {authContext.isAdmin === 1 && (
+                <span
+                  className={classes.unArchiveOrderButton}
+                  onClick={handleUnArchiveOrder}
+                >
+                  <i className="fas fa-redo-alt"></i>
+                </span>
+              )}
             </Fragment>
           ) : (
             <Fragment>
@@ -285,7 +287,7 @@ const OrderTab: React.FC<{
           )}
         </Accordion.Body>
       </Accordion.Item>
-      {props.order.archived_at ? (
+      {props.order.archived_at || authContext.isAdmin === 0 ? (
         <OrderModalArchived
           show={show}
           handleClose={handleClose}
