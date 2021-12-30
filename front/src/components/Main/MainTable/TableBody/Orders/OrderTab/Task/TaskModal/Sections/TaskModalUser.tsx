@@ -1,4 +1,4 @@
-import { RefObject, useState, useContext } from "react";
+import { RefObject, useState, useContext, Fragment } from "react";
 import { Accordion, Form, Spinner } from "react-bootstrap";
 import UserContext from "../../../../../../../../../store/user-context";
 import User from "../../../../../../../../../types/user";
@@ -37,11 +37,12 @@ const TaskModalUser: React.FC<{
           animation="border"
           variant="primary"
         />
-        <Form className={isProcessing ? "d-none" : ""}>
+        <div className={isProcessing ? "d-none" : ""}>
           <Form.Group controlId="emailInput">
             <Form.Label>Users List</Form.Label>
             <Form.Select ref={props.refs.user}>
-              <option value="">No user assigned</option>
+              <option value="">Select user from list</option>
+              <option value="0">No user assigned</option>
               {availableUsers &&
                 availableUsers.map((user, index) => (
                   <option
@@ -54,7 +55,7 @@ const TaskModalUser: React.FC<{
                 ))}
             </Form.Select>
           </Form.Group>
-        </Form>
+        </div>
       </Accordion.Body>
     </Accordion.Item>
   );

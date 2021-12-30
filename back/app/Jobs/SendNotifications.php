@@ -2,14 +2,12 @@
 
 namespace App\Jobs;
 
-use Illuminate\Database\Eloquent\Collection;
-
 class SendNotifications extends Job
 {
-    private Collection $users;
+    private iterable $users;
     private array $notificationData;
 
-    public function __construct(Collection $users, array $notificationData)
+    public function __construct(iterable $users, array $notificationData)
     {
         $this->users = $users;
         $this->notificationData = $notificationData;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AccountCreated;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +31,11 @@ class UserController extends Controller
             "password" => Hash::make(str_random(12))
         ]);
         Mail::to($request->email)->send(new AccountCreated());
+
+        NotificationService::sendNotificationToAllUsers([
+            "content" => "User " . $request->email . " was added",
+            "order_id" => null
+        ]);
         return response()->json($newUser, 201);
     }
 
@@ -38,7 +44,13 @@ class UserController extends Controller
         if ($userId === (string)auth()->id()) {
             return response('You cannot delete yourself', 403);
         }
-        User::findOrFail($userId)->delete();
+        $requestedUser =  User::findOrFail($userId);
+        $requestedUser->delete();
+
+        NotificationService::sendNotificationToAllUsers([
+            "content" => "User " . $requestedUser->email . " was deleted",
+            "order_id" => null
+        ]);
         return response('Deleted', 200);
     }
 }

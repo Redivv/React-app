@@ -34,11 +34,14 @@ const TaskModal: React.FC<{
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const taskColumnNumber = props.task ? props.task.column_number : 0;
+    console.log(userInput.current);
     const assignedUserId =
-      userInput.current?.value === "" ? null : +userInput.current?.value!;
+      userInput.current?.value === ""
+        ? props.task?.user_id!
+        : +userInput.current?.value!;
     const taskObject: Task = {
       title: titleInput.current?.value!,
-      user_id: assignedUserId,
+      user_id: assignedUserId === 0 ? null : assignedUserId,
       description: descriptionInput.current?.value!,
       validation_terms: validationTermsInput.current?.value!,
       validation_comments: validationCommentsInput.current?.value!,
@@ -61,7 +64,6 @@ const TaskModal: React.FC<{
         taskObject
       )
         .then((response) => {
-          console.log(response.data);
           props.handleEditTask!(response.data, props.ordinalNumber!);
           alert("Task Changed");
           setIsProcessing(false);

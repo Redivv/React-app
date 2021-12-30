@@ -14,4 +14,9 @@ class NotificationService
         $users = User::all()->except(Auth::id());
         Queue::push(new SendNotifications($users, $notificationData));
     }
+
+    public static function sendNotificationToSingleUser(User $receipient, array $notificationData)
+    {
+        Queue::push(new SendNotifications([$receipient], $notificationData));
+    }
 }

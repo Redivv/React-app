@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
 use App\Models\Order;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -76,7 +75,12 @@ class OrderController extends Controller
         $editedModel = Order::where('id', $request->id)->whereNull("archived_at")->first();
         $editedModel->fill($request->except(["token", "files"]));
         $editedModel->save();
-        $editedModel->files()->sync(array_column($request->get("files"), "id"));
+        $editedModel->files()->sync(array_column((array)$request->get("files"), "id"));
+
+        NotificationService::sendNotificationToAllUsers([
+            "content" => "Order " . $editedModel->client . " " . $editedModel->shipping_deadline . " was updated",
+            "order_id" => $editedModel->id
+        ]);
         return response('Updated');
     }
 
@@ -91,7 +95,7 @@ class OrderController extends Controller
         $requestedOrder = Order::where('id', $orderId)->whereNull("archived_at")->first();
         $requestedOrder->archive();
         NotificationService::sendNotificationToAllUsers([
-            "content" => "An order has been archived - " . $requestedOrder->client . " " . $requestedOrder->shipping_deadline,
+            "content" => "An order " . $requestedOrder->client . " " . $requestedOrder->shipping_deadline . " was archived",
             "order_id" => $orderId
         ]);
         return response('Archived');
@@ -99,7 +103,12 @@ class OrderController extends Controller
 
     public function unArchive(string $orderId)
     {
-        Order::where('id', $orderId)->whereNotNull("archived_at")->first()->unArchive();
-        return response('Archived');
+        $requestedOrder = Order::where('id', $orderId)->whereNull("archived_at")->first();
+        $requestedOrder->unArchive();
+        NotificationService::sendNotificationToAllUsers([
+            "content" => "An order " . $requestedOrder->client . " " . $requestedOrder->shipping_deadline . " was restored from the archive",
+            "order_id" => $orderId
+        ]);
+        return response('Unarchived');
     }
 }
