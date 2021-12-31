@@ -60,6 +60,7 @@ const OrderModal: React.FC<{
   };
 
   const handleCloseModal = () => {
+    setOrderAttachments([]);
     props.handleClose();
   };
 

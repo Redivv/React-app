@@ -37,15 +37,22 @@ const ResetPasswordForm = () => {
       params.get("email")!,
       resetPasswordPasswordInput.current?.value!,
       resetPasswordConfirmPasswordInput.current?.value!
-    ).then(() => {
-      alert("Password sucessfully reset");
-      setIsProcessing(false);
-      if (authContext.accessToken) {
-        TokenRequestService.tokenLogoutRequest(authContext.accessToken!);
-        authContext.logout();
-        history.push("/login");
-      }
-    });
+    )
+      .then(() => {
+        alert("Password sucessfully reset");
+        setIsProcessing(false);
+        if (authContext.accessToken) {
+          TokenRequestService.tokenLogoutRequest(authContext.accessToken!);
+          authContext.logout();
+          history.push("/login");
+        }
+      })
+      .catch(() => {
+        alert(
+          "Invalid data, passwords must match and be at least 8 characters long"
+        );
+        setIsProcessing(false);
+      });
   };
 
   return (

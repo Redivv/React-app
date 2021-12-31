@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Queue;
 
 class NotificationService
 {
-    public static function sendNotificationToAllUsers(array $notificationData)
+    public static function sendNotificationToAllUsers(array $notificationData, array $exceptedIds = [])
     {
-        $users = User::all()->except(Auth::id());
-        Queue::push(new SendNotifications($users, $notificationData));
+        $users = User::all()->except(array_merge([Auth::id()], $exceptedIds));
+        if ($users) {
+            Queue::push(new SendNotifications($users, $notificationData));
+        }
     }
 
     public static function sendNotificationToSingleUser(User $receipient, array $notificationData)

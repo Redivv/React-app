@@ -35,7 +35,7 @@ class UserController extends Controller
         NotificationService::sendNotificationToAllUsers([
             "content" => "User " . $request->email . " was added",
             "order_id" => null
-        ]);
+        ], [$newUser->id]);
         return response()->json($newUser, 201);
     }
 

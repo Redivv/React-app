@@ -17,9 +17,9 @@ const LoginForm = () => {
         loginMailInput.current.value,
         loginPasswordInput.current.value
       )
-        .then((response) => {
-          authContext.login(response.data.access_token, response.data.isAdmin);
-        })
+        .then((response) =>
+          authContext.login(response.data.access_token, response.data.isAdmin)
+        )
         .catch(() => alert("Invalid login data"));
     }
   };

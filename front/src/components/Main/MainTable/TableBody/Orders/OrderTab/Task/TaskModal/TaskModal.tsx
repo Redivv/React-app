@@ -93,6 +93,7 @@ const TaskModal: React.FC<{
   };
 
   const handleCloseModal = () => {
+    setTaskAttachments([]);
     props.handleClose();
   };
 

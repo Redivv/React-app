@@ -88,7 +88,7 @@ const TaskModalNotes: React.FC<{
             onChange={handleFileAdded}
             ref={fileRef}
             disabled={filesUploading}
-            accept=".doc,.docx,.pdf,.jpg.png.jpeg,.txt"
+            accept=".doc,.docx,.pdf,.jpg,.png,.jpeg,.txt"
           />
         </Form.Group>
         <Spinner
