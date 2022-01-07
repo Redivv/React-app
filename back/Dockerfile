@@ -3,7 +3,6 @@ WORKDIR /var/www/html
 
 RUN apt update
 RUN apt install -y zip unzip libonig-dev cron vim rsyslog \
-&& docker-php-ext-install pdo \
 && docker-php-ext-install pdo_mysql \
 && docker-php-ext-install mbstring \
 && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
