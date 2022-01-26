@@ -103,7 +103,7 @@ class OrderController extends Controller
 
     public function unArchive(string $orderId)
     {
-        $requestedOrder = Order::where('id', $orderId)->whereNull("archived_at")->first();
+        $requestedOrder = Order::where('id', $orderId)->whereNotNull("archived_at")->first();
         $requestedOrder->unArchive();
         NotificationService::sendNotificationToAllUsers([
             "content" => "An order " . $requestedOrder->client . " " . $requestedOrder->shipping_deadline . " was restored from the archive",
