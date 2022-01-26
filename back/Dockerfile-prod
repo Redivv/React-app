@@ -12,7 +12,7 @@ RUN apt install -y zip unzip libonig-dev cron \
 && docker-php-ext-install mbstring
 RUN rm -rf /var/lib/apt/lists/*
 
-COPY --from=0 /app/* .
+COPY --from=0 /app ./
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
