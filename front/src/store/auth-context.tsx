@@ -33,7 +33,7 @@ export const AuthContextProvider: React.FC = (props) => {
         if (error.response?.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
           const response = await TokenRequestService.tokenRefreshRequest(
-            accessToken
+            retriveStoredTokenData()!
           );
           loginHandler(response.data.access_token, response.data.isAdmin);
           let errorUrl = new URL(originalConfig.url);
@@ -45,7 +45,7 @@ export const AuthContextProvider: React.FC = (props) => {
           originalConfig.url ===
             process.env.REACT_APP_REFRESH_TOKEN_ROUTE!.replace(
               "<ID_TOKEN>",
-              accessToken
+              retriveStoredTokenData()!
             )
         ) {
           logoutHandler();

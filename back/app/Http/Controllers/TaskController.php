@@ -13,6 +13,7 @@ class TaskController extends Controller
 {
     public function all(string $orderId)
     {
+        sleep(10);
         return response()->json(
             Order::findOrFail($orderId)
                 ->tasks()

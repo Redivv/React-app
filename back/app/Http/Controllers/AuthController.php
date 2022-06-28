@@ -51,7 +51,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh(true, true));
     }
 
     /**
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
         return response()->json([
             'access_token' => $token,
-            'isAdmin' => auth()->user()->is_admin
+            'isAdmin' => auth()->setToken($token)->user()->is_admin
         ]);
     }
 }
